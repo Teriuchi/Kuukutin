@@ -18,24 +18,29 @@ canvas.height = window.innerHeight;
 
 Game = function(){
 	this.player = {
-       x: 100,
-       y: 100,
-       w: 52,
-	   h: 60,
-	   runw: 56,
-	   runh: 72,
-	   diry: 1,
-	   dirx: 1,
-	   movestat: 1,
-	   idleframe: 0,
-	   idleframemax: 3,
-	   idletick: 0,
-	   idletickmax: 11,
-	   runframe: 0,
-	   runframemax: 5,
-	   runtick: 0,
-	   runtickmax: 6,
-       img: null
+		x: 100,
+       		y: 100,
+       		w: 52,
+	   	h: 60,
+		runw: 56,
+		runh: 72,
+		diry: 1,
+		dirx: 1,
+		movestat: 2,
+		tick: 0,
+		idleframe: 0,
+		idleframemax: 3,
+		idletickmax: 11,
+		runframe: 0,
+		runframemax: 5,
+		runtickmax: 6,
+		jumpframe: 0,
+		jumpframemax: 6,
+		jumptickmax: 6,
+		jumptime: 0,
+		jumploop: false,
+		landing: false,
+		img: null
 	};
 	this.img = new Image();
 	this.img.onload = function() {
@@ -46,7 +51,7 @@ Game = function(){
 		if (this.img === null)
 			return;
 		switch(this.movestat){
-			case 0:	
+			case 0:	//idle animation
 					ctx.drawImage(this.img,18+(this.idleframe*64),24,26,30,this.x,this.y,this.w,this.h);
 					if (this.idletick <= this.idletickmax){
 						this.idletick++;
@@ -59,7 +64,7 @@ Game = function(){
 						this.idleframe = 0;
 					}
 					break;
-			case 1:	
+			case 1:	//run animation
 					ctx.drawImage(this.img,18+(this.runframe*64),82,30,36,this.x,this.y-12,this.runw,this.runh);
 					if (this.runtick <= this.runtickmax){
 						this.runtick++;
@@ -70,6 +75,59 @@ Game = function(){
 					}
 					if (this.runframe >= this.runframemax){
 						this.runframe = 0;
+					}
+					break;
+			case 2: //jumping animation
+					if (this.landing === false){
+						if (this.jumploop === false){ //jump start
+							ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+							if (this.tick <= this.jumptickmax){
+								this.tick++;
+							}
+							else{
+								this.tick = 0;
+								this.jumpframe++;
+							}
+							if (this.jumpframe >= this.jumpframemax){
+								this.jumpframe = 6;
+								this.jumploop = true;
+								this.jumptickmax = 12;
+							}
+						}
+						else{ //jump midair
+							ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+							if (this.tick <= this.jumptickmax){
+								this.tick++;
+							}
+							else{
+								this.tick = 0;
+								if (this.jumpframe === 5){
+									this.jumpframe++;
+									this.jumptime++;
+									}
+								else
+									this.jumpframe--;
+							}
+							if (this.jumptime === 10){
+								this.jumptime = 0;
+								this.landing = true;
+							}
+						}
+					}
+					else{ //jump landing
+						ctx.drawImage(this.img,466,338,30,36,this.x,this.y-12,this.runw,this.runh);
+						this.jumptickmax = 6;
+						this.tick = 0;
+						if (this.tick <= this.jumptickmax){
+							this.tick++;
+							console.log("hohoi");
+						}
+						else{
+							this.tick = 0;
+							this.movestat = 1;
+							this.jumploop = false;
+							this.landing = false; //remember to fix landing animation
+						}
 					}
 					break;
 			default:
