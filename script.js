@@ -16,20 +16,6 @@ canvas.height = window.innerHeight;
 	}
 }*/
 
-
-function controls() {
-	if(event.keyCode == 39) // Right arrow
-		this.player.x += 1;
-	if(event.keyCode == 37) // Left Arrow
-		this.player.x -= 1;
-	if(event.keyCode == 38) // Up Arrow
-		this.player.y -= 4;
-	if(event.keyCode == 40) // Down arrow
-		this.player.y += 4;
-	if(event.keyCode == 32) //Spacebar
-		this.player.y += 40; 
-}
-
 Game = function(){
 	this.player = {
        x: 100,
@@ -49,7 +35,6 @@ Game = function(){
 	   runframemax: 5,
 	   runtick: 0,
 	   runtickmax: 6,
-	   
        img: null
 	};
 	this.img = new Image();
@@ -90,12 +75,32 @@ Game = function(){
 			default:
 		}
 	}
+		
+		window.addEventListener("keydown", function(e) {
+			game.key = e.keyCode;
+		})
+		
+		window.addEventListener("keyup", function (e) {
+            game.key = false;
+        })
 
 	this.animate = function(){
 		requestAnimationFrame(game.animate);
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		game.player.playeranimate();
-	}
+		
+		if(game.key && game.key == 39) // Right arrow
+			{game.player.x += 2;}
+		if(game.key && game.key == 37) // Left Arrow
+			{game.player.x -= 2;}
+		if(game.key && game.key == 38) // Up Arrow
+			{game.player.y -= 4;}
+		if(game.key && game.key == 40) // Down arrow
+			{game.player.y += 4;}
+		if(game.key && game.key == 32) //Spacebar
+			{game.player.y -= 10;} 
+		}
+	
 }
 var game = new Game();
 window.onload = game.animate();
