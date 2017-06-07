@@ -1,0 +1,9 @@
+Credits:
+
+- Player Sprite by dogchicken 
+	
+	opengameart.org/content/cute-monster-sprite-sheet
+
+- Coin sprite by Puddin 
+
+	opengameart.org/content/rotating-coin
