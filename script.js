@@ -27,7 +27,7 @@ Game = function(){
 		runh: 72,
 		diry: 1,
 		dirx: 1,
-		movestat: 0,
+		movestat: 0,	//changes the mode of movement
 		tick: 0,	//frame data starts from here
 		idleframe: 0,
 		idleframemax: 4,
