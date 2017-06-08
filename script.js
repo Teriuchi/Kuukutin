@@ -15,7 +15,7 @@ canvas.style.backgroundColor = "blue";
 	I.draw = function() {
 		this.draw()
 	}
-}*/
+}*/ 
 
 Game = function(){
 	this.player = {
