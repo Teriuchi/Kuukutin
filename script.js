@@ -8,14 +8,14 @@ canvas.style.backgroundColor = "blue";
 var Game = function(){
 	this.player = {
 		x: 100,
-		y: 100,
+		y: canvas.height,
 		w: 52,
 	   	h: 60,
 		runw: 56,
 		runh: 72,
 		diry: 1,
 		dirx: 1,
-		movestat: 3,
+		movestat: 1,
 		tick: 0,	//frame data starts from here
 		idleframe: 0,
 		idleframemax: 4,
@@ -223,14 +223,22 @@ var Game = function(){
 			game.player.gravitySpeed += game.player.gravity;
 		}
 		
-		if(game.key && game.key == 39) // Right arrow
-			{game.player.x += 2;}
+		if(game.key && game.key == 39)	// Right arrow
+			{game.player.x += 6;}
+			if(game.player.x < 0)
+				game.player.x = 0;
 		if(game.key && game.key == 37) // Left Arrow
-			{game.player.x -= 2;}
+			{game.player.x -= 6;}
+				if(game.player.x + game.player.w > canvas.width)
+					game.player.x = canvas.width - game.player.w;
 		if(game.key && game.key == 38) // Up Arrow
 			{game.player.y -= 4;}
+				if(game.player.y < 0)
+					game.player.y = 0;
 		if(game.key && game.key == 40) // Down arrow
 			{game.player.y += 4;}
+				if(game.player.y > canvas.height)
+					game.player.y = canvas.height;
 		if(game.key && game.key == 32) //Spacebar
 			{game.player.y -= 10;} 
 		game.player.y = game.player.y + game.player.gravitySpeed;
