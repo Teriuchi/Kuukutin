@@ -15,7 +15,7 @@ var Game = function(){
 		runh: 72,
 		diry: 1,
 		dirx: 1,
-		movestat: 1,
+		movestat: 3,
 		tick: 0,	//frame data starts from here
 		idleframe: 0,
 		idleframemax: 4,
@@ -26,7 +26,7 @@ var Game = function(){
 		jumpframe: 0,
 		jumpframemax: 6,
 		jumptickmax: 6,
-		jumplooptickmax: 12,
+		jumplootickmax: 12,
 		deathframe: 0,
 		deathframemax: 7,
 		deathtickmax: 10,
@@ -218,7 +218,11 @@ var Game = function(){
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		coin.coinanimate(); //in future coins will be animated here, before the player
 		game.player.playeranimate();
-		game.player.gravitySpeed += game.player.gravity;
+		
+		if(game.player.movestat === 3){
+			game.player.gravitySpeed += game.player.gravity;
+		}
+		
 		if(game.key && game.key == 39) // Right arrow
 			{game.player.x += 2;}
 		if(game.key && game.key == 37) // Left Arrow
