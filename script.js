@@ -5,7 +5,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 canvas.style.backgroundColor = "blue";
 
-Game = function(){
+var Game = function(){
 	this.player = {
 		x: 100,
 		y: 100,
@@ -143,7 +143,7 @@ Game = function(){
 		this.tick = this.idleframe = this.runframe = this.jumpframe = this.deathframe = this.attackframe = 0;
 	}
 	
-	obstacles = [];
+	var obstacles = [];
 	
 	/*function Obstacle(I) {					//PLACEHOLDER Needs fixing
 		I.active = true;
