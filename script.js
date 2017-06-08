@@ -26,15 +26,13 @@ Game = function(){
 		jumpframe: 0,
 		jumpframemax: 6,
 		jumptickmax: 6,
+		jumplootickmax: 12,
 		deathframe: 0,
 		deathframemax: 7,
 		deathtickmax: 10,
 		attackframe: 0,
 		attackframemax: 5,
 		attacktickmax: 3, //frame data ends here
-		jumploop: false,
-		landing: false,
-		jumptime: 0, //placeholder value, should be replaced with the jumping physics later
 		gravity: 0.05,
 		gravitySpeed: 0,
 		img: null
@@ -75,59 +73,43 @@ Game = function(){
 					}
 					break;
 			case 2: //jumping animation
-					if (this.landing === false){
-						if (this.jumploop === false){ //jump start
-							ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
-							if (this.tick <= this.jumptickmax){
-								this.tick++;
-							}
-							else{
-								this.tick = 0;
-								this.jumpframe++;
-							}
-							if (this.jumpframe >= this.jumpframemax){
-								this.jumpframe = 6;
-								this.jumploop = true;
-								this.jumptickmax = 12;
-							}
-						}
-						else{ //jump midair
-							ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
-							if (this.tick <= this.jumptickmax){
-								this.tick++;
-							}
-							else{
-								this.tick = 0;
-								if (this.jumpframe === 5){
-									this.jumpframe++;
-									this.jumptime++;
-									}
-								else
-									this.jumpframe--;
-							}
-							if (this.jumptime === 10){
-								this.jumptime = 0;
-								this.landing = true;
-								this.jumptickmax = 6;
-								this.tick = 0;
-							}
-						}
+					ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+					if (this.tick <= this.jumptickmax){
+						this.tick++;
 					}
-					else{ //jump landing
-						ctx.drawImage(this.img,466,338,30,36,this.x,this.y-12,this.runw,this.runh);
-						if (this.tick <= this.jumptickmax){
-							this.tick++;
-						}
-						else{
-							this.tick = 0;
-							this.jumploop = false;	//expiriencing technical difficulties right here
-							this.landing = false;	//needs still fixing
-							this.jumpframe = 7;
-							this.movestat = 1;
-						}
+					else{
+						this.tick = 0;
+						this.jumpframe++;
+					}
+					if (this.jumpframe >= this.jumpframemax){
+						this.jumpframe = 6;
 					}
 					break;
-			case 3:	//death animation
+			case 3:	//jumping loop animation
+					ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+					if (this.tick <= this.jumplooptickmax){
+						this.tick++;
+					}
+					else{
+						this.tick = 0;
+						if (this.jumpframe <= 5){
+							this.jumpframe = 6;
+							}
+						else
+							this.jumpframe--;
+					}
+					break;
+			case 4:	//landing animation
+					ctx.drawImage(this.img,18+(7*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+					if (this.tick <= this.jumptickmax){
+						this.tick++;
+					}
+					else{
+						this.tick = 0;
+						this.jumpframe++;
+					}
+					break;
+			case 5:	//death animation
 					ctx.drawImage(this.img,14+(this.deathframe*64),212,30,36,this.x-6,this.y-8,this.runw,this.runh);
 					if (this.tick <= this.deathtickmax){
 						this.tick++;
@@ -141,7 +123,7 @@ Game = function(){
 						this.movestat = -1;
 					}
 					break;
-			case 4: //attack animation
+			case 6: //attack animation
 					ctx.drawImage(this.img,18+(this.attackframe*64),148,30,36,this.x,this.y-8,this.runw,this.runh);
 					if (this.tick <= this.attacktickmax){
 						this.tick++;
@@ -153,7 +135,6 @@ Game = function(){
 					if (this.attackframe >= this.attackframemax){
 						this.attackframe = 0;
 					}
-					break;
 					break;
 			default:
 		}
