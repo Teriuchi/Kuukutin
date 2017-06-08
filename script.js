@@ -26,7 +26,7 @@ var Game = function(){
 		jumpframe: 0,
 		jumpframemax: 6,
 		jumptickmax: 6,
-		jumplootickmax: 12,
+		jumplooptickmax: 12,
 		deathframe: 0,
 		deathframemax: 7,
 		deathtickmax: 10,
