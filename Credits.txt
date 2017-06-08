@@ -7,3 +7,7 @@ Credits:
 - Coin sprite by Puddin 
 
 	opengameart.org/content/rotating-coin
+
+- Background image by PWL 
+
+	opengameart.org/content/seamless-cave-background
