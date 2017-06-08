@@ -110,7 +110,7 @@ var Game = function(){
 					}
 					break;
 			case 5:	//death animation
-					ctx.drawImage(this.img,14+(this.deathframe*64),212,30,36,this.x-6,this.y-8,this.runw,this.runh);
+					ctx.drawImage(this.img,14+(this.deathframe*64),212,34,36,this.x-6,this.y-8,this.runw+10,this.runh);
 					if (this.tick <= this.deathtickmax){
 						this.tick++;
 					}
