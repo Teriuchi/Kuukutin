@@ -204,7 +204,7 @@ var Game = function(){
 	}
 		
 		window.addEventListener("keydown", function(e) {
-			if (!(game.player.movestat === 3)){
+			if (!(game.player.movestat === 5)){
 				game.key = e.keyCode;
 			}
 		})
