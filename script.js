@@ -5,18 +5,6 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 canvas.style.backgroundColor = "blue";
 
-/*function Obstacle(I) {					PLACEHOLDER
-	I.active = true;
-	I.color = "white";
-	I.y = 0;
-	I.width = 30;
-	I.height = Math.random() * 1000 + 1;
-	
-	I.draw = function() {
-		this.draw()
-	}
-}*/ 
-
 Game = function(){
 	this.player = {
 		x: 100,
@@ -27,7 +15,7 @@ Game = function(){
 		runh: 72,
 		diry: 1,
 		dirx: 1,
-		movestat: 0,	//changes the mode of movement
+		movestat: 1,
 		tick: 0,	//frame data starts from here
 		idleframe: 0,
 		idleframemax: 4,
@@ -47,6 +35,8 @@ Game = function(){
 		jumploop: false,
 		landing: false,
 		jumptime: 0, //placeholder value, should be replaced with the jumping physics later
+		gravity: 0.05,
+		gravitySpeed: 0,
 		img: null
 	};
 	this.img = new Image();
@@ -172,6 +162,37 @@ Game = function(){
 		this.tick = this.idleframe = this.runframe = this.jumpframe = this.deathframe = this.attackframe = 0;
 	}
 	
+	obstacles = [];
+	
+	/*function Obstacle(I) {					//PLACEHOLDER Needs fixing
+		I.active = true;
+		I.color = "white";
+		I.y = 0;
+		I.x = 1000;
+		I.width = 30;
+		I.height = Math.random() * 1000 + 1;
+	
+		I.inBounds = function() {
+			return I.x >= 0 && I.x <= window.width && 
+			I.y >= 0 && I.y <= window.height;
+		};
+	
+		I.draw = function() {
+			this.draw() = function() {
+				canvas.fillStyle = this.color;
+				canvas.fillRect(this.x, this.y, this.width, this.height);
+			}
+		}
+		
+		I.update = function() {
+			I.x -= 1;
+			I.y = I.y;
+			I.active = I.active & I.inBounds();
+		};
+	
+		return I;
+	} */
+	
 	this.imgcoin = new Image();
 	this.imgcoin.src = "sprites/coin/full_coins.png";
 	this.Coin = function(coinx, coiny){
@@ -216,7 +237,7 @@ Game = function(){
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		coin.coinanimate(); //in future coins will be animated here, before the player
 		game.player.playeranimate();
-		
+		game.player.gravitySpeed += game.player.gravity;
 		if(game.key && game.key == 39) // Right arrow
 			{game.player.x += 2;}
 		if(game.key && game.key == 37) // Left Arrow
@@ -227,7 +248,30 @@ Game = function(){
 			{game.player.y += 4;}
 		if(game.key && game.key == 32) //Spacebar
 			{game.player.y -= 10;} 
+		game.player.y = game.player.y + game.player.gravitySpeed;
+		game.player.hitBottom();
+	}
+	
+	this.player.hitBottom = function() {
+		var rockbottom = canvas.height - game.player.h;
+		if(game.player.y > rockbottom) {
+			game.player.y = rockbottom;
 		}
+	}
+		
+		/*game.obstacles.forEach(function(game.obstacle) { //PLACEHOLDER Needs fixing
+			game.obstacle.update();
+		});
+		
+		game.obstacles = game.obstacle.filter(function(game.obstacle) {
+			return game.obstacle.active;
+		});
+		
+		if(game.player.tick == 0){
+			game.obstacles.push(Obstacle());
+		}
+		
+		game.obstacle.draw();*/
 	
 }
 var game = new Game();
