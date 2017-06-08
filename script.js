@@ -3,6 +3,7 @@ var canvas = document.getElementById("canvas"),
        
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+canvas.style.backgroundColor = "blue";
 
 /*function Obstacle(I) {					PLACEHOLDER
 	I.active = true;
@@ -19,17 +20,17 @@ canvas.height = window.innerHeight;
 Game = function(){
 	this.player = {
 		x: 100,
-       		y: 100,
-       		w: 52,
+		y: 100,
+		w: 52,
 	   	h: 60,
 		runw: 56,
 		runh: 72,
 		diry: 1,
 		dirx: 1,
-		movestat: 2,
-		tick: 0,
+		movestat: 0,
+		tick: 0,	//frame data starts from here
 		idleframe: 0,
-		idleframemax: 3,
+		idleframemax: 4,
 		idletickmax: 11,
 		runframe: 0,
 		runframemax: 5,
@@ -37,9 +38,15 @@ Game = function(){
 		jumpframe: 0,
 		jumpframemax: 6,
 		jumptickmax: 6,
-		jumptime: 0,
+		deathframe: 0,
+		deathframemax: 7,
+		deathtickmax: 10,
+		attackframe: 0,
+		attackframemax: 5,
+		attacktickmax: 3, //frame data ends here
 		jumploop: false,
 		landing: false,
+		jumptime: 0, //placeholder value, should be replaced with the jumping physics later
 		img: null
 	};
 	this.img = new Image();
@@ -53,11 +60,11 @@ Game = function(){
 		switch(this.movestat){
 			case 0:	//idle animation
 					ctx.drawImage(this.img,18+(this.idleframe*64),24,26,30,this.x,this.y,this.w,this.h);
-					if (this.idletick <= this.idletickmax){
-						this.idletick++;
+					if (this.tick <= this.idletickmax){
+						this.tick++;
 					}
 					else{
-						this.idletick = 0;
+						this.tick = 0;
 						this.idleframe++;
 					}
 					if (this.idleframe >= this.idleframemax){
@@ -66,11 +73,11 @@ Game = function(){
 					break;
 			case 1:	//run animation
 					ctx.drawImage(this.img,18+(this.runframe*64),82,30,36,this.x,this.y-12,this.runw,this.runh);
-					if (this.runtick <= this.runtickmax){
-						this.runtick++;
+					if (this.tick <= this.runtickmax){
+						this.tick++;
 					}
 					else{
-						this.runtick = 0;
+						this.tick = 0;
 						this.runframe++;
 					}
 					if (this.runframe >= this.runframemax){
@@ -111,31 +118,93 @@ Game = function(){
 							if (this.jumptime === 10){
 								this.jumptime = 0;
 								this.landing = true;
+								this.jumptickmax = 6;
+								this.tick = 0;
 							}
 						}
 					}
 					else{ //jump landing
 						ctx.drawImage(this.img,466,338,30,36,this.x,this.y-12,this.runw,this.runh);
-						this.jumptickmax = 6;
-						this.tick = 0;
 						if (this.tick <= this.jumptickmax){
 							this.tick++;
-							console.log("hohoi");
 						}
 						else{
 							this.tick = 0;
+							this.jumploop = false;	//expiriencing technical difficulties right here
+							this.landing = false;	//needs still fixing
+							this.jumpframe = 7;
 							this.movestat = 1;
-							this.jumploop = false;
-							this.landing = false; //remember to fix landing animation
 						}
 					}
+					break;
+			case 3:	//death animation
+					ctx.drawImage(this.img,14+(this.deathframe*64),212,30,36,this.x-6,this.y-8,this.runw,this.runh);
+					if (this.tick <= this.deathtickmax){
+						this.tick++;
+					}
+					else{
+						this.tick = 0;
+						this.deathframe++;
+					}
+					if (this.deathframe >= this.deathframemax){
+						this.deathframe = 0;
+						this.movestat = -1;
+					}
+					break;
+			case 4: //attack animation
+					ctx.drawImage(this.img,18+(this.attackframe*64),148,30,36,this.x,this.y-8,this.runw,this.runh);
+					if (this.tick <= this.attacktickmax){
+						this.tick++;
+					}
+					else{
+						this.tick = 0;
+						this.attackframe++;
+					}
+					if (this.attackframe >= this.attackframemax){
+						this.attackframe = 0;
+					}
+					break;
 					break;
 			default:
 		}
 	}
+	this.player.resetframes = function(){ //implemented for future usage
+		this.tick = this.idleframe = this.runframe = this.jumpframe = this.deathframe = this.attackframe = 0;
+	}
+	
+	this.imgcoin = new Image();
+	this.imgcoin.src = "sprites/coin/full_coins.png";
+	this.Coin = function(coinx, coiny){
+		this.x = coinx;
+		this.y = coiny;
+		this.w = 22.5;
+		this.h = 24;
+		this.points;
+		this.tick = 0;
+		this.tickmax = 5;
+		this.curframe = 0;
+		this.maxframe = 8;
+		this.img = game.imgcoin;
+		
+		this.coinanimate = function(){
+			ctx.drawImage(this.img,(this.curframe*16),0,15,16,this.x,this.y,this.w,this.h);
+			if (this.tick <= this.tickmax){
+				this.tick++;
+			}
+			else{
+				this.tick = 0;
+				this.curframe++;
+			}
+			if (this.curframe >= this.maxframe){
+				this.curframe = 0;
+			}
+		}
+	}
 		
 		window.addEventListener("keydown", function(e) {
-			game.key = e.keyCode;
+			if (!(game.player.movestat === 3)){
+				game.key = e.keyCode;
+			}
 		})
 		
 		window.addEventListener("keyup", function (e) {
@@ -145,6 +214,7 @@ Game = function(){
 	this.animate = function(){
 		requestAnimationFrame(game.animate);
 		ctx.clearRect(0,0,canvas.width,canvas.height);
+		coin.coinanimate(); //in future coins will be animated here, before the player
 		game.player.playeranimate();
 		
 		if(game.key && game.key == 39) // Right arrow
@@ -161,4 +231,5 @@ Game = function(){
 	
 }
 var game = new Game();
+var coin = new game.Coin(200, 100); //placeholder, remove once coin spawning has been implemented
 window.onload = game.animate();
