@@ -286,6 +286,7 @@ var Game = function(){
 			game.player.movestat = 1;
 			game.player.gravitySpeed = 0;
 		}
+	}
 		
 		/*game.obstacles.forEach(function(game.obstacle) { //PLACEHOLDER Needs fixing
 			game.obstacle.update();
