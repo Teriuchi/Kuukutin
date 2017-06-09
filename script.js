@@ -57,7 +57,15 @@ var Game = function(){
 			return;
 		switch(this.movestat){
 			case 0:	//idle animation
-					ctx.drawImage(this.img,18+(this.idleframe*64),24,26,30,this.x,this.y,this.w,this.h);
+					if (this.gravityReversed){
+						ctx.save();
+						ctx.scale(1, -1);
+						ctx.drawImage(this.img,18+(this.idleframe*64),24,26,30,this.x,(this.y*-1)-this.h,this.w,this.h);
+					}
+					else
+						ctx.drawImage(this.img,18+(this.idleframe*64),24,26,30,this.x,this.y,this.w,this.h);
+					if (this.gravityReversed)
+						ctx.restore();
 					if (this.tick <= this.idletickmax){
 						this.tick++;
 					}
@@ -70,7 +78,14 @@ var Game = function(){
 					}
 					break;
 			case 1:	//run animation
+					if (this.gravityReversed){
+						ctx.save();
+						ctx.scale(1, -1);
+						ctx.drawImage(this.img,18+(this.runframe*64),82,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
+					}
 					ctx.drawImage(this.img,18+(this.runframe*64),82,30,36,this.x,this.y-12,this.runw,this.runh);
+					if (this.gravityReversed)
+						ctx.restore();
 					if (this.tick <= this.runtickmax){
 						this.tick++;
 					}
@@ -83,6 +98,11 @@ var Game = function(){
 					}
 					break;
 			case 2: //jumping animation
+					if (this.gravityReversed){
+						ctx.save();
+						ctx.scale(1, -1);
+						ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
+					}
 					ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
 					if (this.tick <= this.jumptickmax){
 						this.tick++;
@@ -96,7 +116,14 @@ var Game = function(){
 					}
 					break;
 			case 3:	//jumping loop animation
+					if (this.gravityReversed){
+						ctx.save();
+						ctx.scale(1, -1);
+						ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
+					}
 					ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+					if (this.gravityReversed)
+						ctx.restore();
 					if (this.tick <= this.jumplooptickmax){
 						this.tick++;
 					}
@@ -110,7 +137,14 @@ var Game = function(){
 					}
 					break;
 			case 4:	//landing animation
+					if (this.gravityReversed){
+						ctx.save();
+						ctx.scale(1, -1);
+						ctx.drawImage(this.img,18+(7*64),338,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
+					}
 					ctx.drawImage(this.img,18+(7*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+					if (this.gravityReversed)
+						ctx.restore();
 					if (this.tick <= this.jumptickmax){
 						this.tick++;
 					}
@@ -120,7 +154,14 @@ var Game = function(){
 					}
 					break;
 			case 5:	//death animation
+					if (this.gravityReversed){
+						ctx.save();
+						ctx.scale(1, -1);
+						ctx.drawImage(this.img,14+(this.deathframe*64),212,34,36,this.x-6,(this.y*-1)-8-this.h,this.runw+10,this.runh);
+					}
 					ctx.drawImage(this.img,14+(this.deathframe*64),212,34,36,this.x-6,this.y-8,this.runw+10,this.runh);
+					if (this.gravityReversed)
+						ctx.restore();
 					if (this.tick <= this.deathtickmax){
 						this.tick++;
 					}
@@ -134,7 +175,14 @@ var Game = function(){
 					}
 					break;
 			case 6: //attack animation
+					if (this.gravityReversed){
+						ctx.save();
+						ctx.scale(1, -1);
+						ctx.drawImage(this.img,18+(this.attackframe*64),148,30,36,this.x,(this.y*-1)-8-this.h,this.runw,this.runh);
+					}
 					ctx.drawImage(this.img,18+(this.attackframe*64),148,30,36,this.x,this.y-8,this.runw,this.runh);
+					if (this.gravityReversed)
+						ctx.restore();
 					if (this.tick <= this.attacktickmax){
 						this.tick++;
 					}
