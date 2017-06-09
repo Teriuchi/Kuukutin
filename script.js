@@ -92,7 +92,8 @@ var Game = function(){
 						ctx.scale(1, -1);
 						ctx.drawImage(this.img,18+(this.runframe*64),82,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
 					}
-					ctx.drawImage(this.img,18+(this.runframe*64),82,30,36,this.x,this.y-12,this.runw,this.runh);
+					else
+						ctx.drawImage(this.img,18+(this.runframe*64),82,30,36,this.x,this.y-12,this.runw,this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.runtickmax){
