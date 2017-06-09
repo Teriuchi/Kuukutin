@@ -40,7 +40,6 @@ var Game = function(){
 		runframe: 0,
 		runframemax: 5,
 		runtickmax: 6,
-		jumping: false,
 		jumpframe: 0,
 		jumpframemax: 6,
 		jumptickmax: 6,
@@ -317,21 +316,10 @@ var Game = function(){
 		ctx.fillStyle = this.color;
 		ctx.font = this.font;
 		ctx.fillText("Points: "+this.score,this.x,this.y);
-	}
-		
-		window.addEventListener("keydown", function(e) {
-			if (!(game.player.movestat === 5)){
-				game.key = e.keyCode;
-			}
-		})
-		
-		window.addEventListener("keyup", function (e) {
-            game.key = false;
-        })		
+	}	
 		window.addEventListener("keydown", function(e) {
 			if(e.repeat)
 				return;
-			console.log(e);
 			if (!(game.player.movestat === 5)){
 				game.key = e.keyCode;
 			}
@@ -378,19 +366,25 @@ var Game = function(){
 		if(game.key && game.key == 37){ // Left Arrow
 			game.player.x -= 6, game.player.y += 0;
 		}
-
 		
-		if(game.key && game.key == 38 && game.player.jumping === false){  // Up Arrow
-			game.player.y -= 20, game.player.y += 0, game.player.movestat = 3;
-			//game.player.jumping = true;
+		if(game.key && game.key == 38){  // Up Arrow
+			if(game.player.gravityReversed === false) {
+				game.player.y -= 20, game.player.y += 0, game.player.movestat = 3;
+			}
+			else {
+				game.player.y += 20, game.player.y += 0, game.player.movestat = 3;
+			}
 		}
 
 		if(game.key && game.key == 32 && game.player.movestat === 3){ //Spacebar
-			if(game.player.gravityReversed)
+			if(game.player.gravityReversed){
 				game.player.gravityReversed = false;
-			else if(game.player.gravityReversed === false)
+				game.player.gravity = -game.player.gravity;
+			}
+			else if(game.player.gravityReversed === false){
 				game.player.gravityReversed = true;
 				game.player.gravity = -game.player.gravity;
+			}	
 		}
 		game.player.y = game.player.y + game.player.gravitySpeed;
 		game.player.hitBottom();
@@ -404,9 +398,13 @@ var Game = function(){
 			game.player.y = rockbottom;
 			game.player.movestat = 4;
 			game.player.gravitySpeed = 0;
-			game.player.jumping = false;
 		}
-	}
+		else if(game.player.y < 0){
+			game.player.y = 0;
+			game.player.movestat = 4;
+			game.player.gravitySpeed = 0;
+		}
+	}	
 	
 		/*game.obstacles.forEach(function(game.obstacle) { //PLACEHOLDER Needs fixing
 			game.obstacle.update();
