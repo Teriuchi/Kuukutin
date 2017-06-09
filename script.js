@@ -1,23 +1,25 @@
+"use strict";
 var canvas 	= document.getElementById("canvas"),
        ctx 	= canvas.getContext("2d");
 var	bg 		= document.createElement('canvas'),
 	bgtx	= bg.getContext('2d');
        
-canvas.style.position 	= "absolute";
-canvas.style.zIndex   	= 1;
-canvas.width 			= window.innerWidth;
-canvas.height 			= window.innerHeight;
-bg.style.position 		= "absolute";
-bg.style.zIndex   		= -1;
+canvas.style.position 		= "absolute";
+canvas.style.zIndex   		= 1;
+canvas.width 				= window.innerWidth;
+canvas.height 				= window.innerHeight;
+bg.style.position 			= "absolute";
+bg.style.zIndex   			= -1;
 bg.style.backgroundColor 	= "#758a88";
-bg.width				= window.innerWidth;
-bg.height				= window.innerHeight;
+bg.width					= window.innerWidth;
+bg.height					= window.innerHeight;
 document.body.appendChild(bg);
+const initialJumpForce = 30;
 
 var Game = function(){
 	this.player = {
 		x: 100,
-		y: canvas.height,
+		y: canvas.height - 60,
 		w: 52,
 	   	h: 60,
 		runw: 56,
@@ -32,6 +34,8 @@ var Game = function(){
 		runframe: 0,
 		runframemax: 5,
 		runtickmax: 6,
+		jumping: false,
+		jumpForce: 0,
 		jumpframe: 0,
 		jumpframemax: 6,
 		jumptickmax: 6,
@@ -42,7 +46,7 @@ var Game = function(){
 		attackframe: 0,
 		attackframemax: 5,
 		attacktickmax: 3, //frame data ends here
-		gravity: 0.05,
+		gravity: 1.2,
 		gravitySpeed: 0,
 		gravityReversed: false,
 		img: null
@@ -163,7 +167,7 @@ var Game = function(){
 						ctx.drawImage(this.img,14+(this.deathframe*64),212,34,36,this.x-6,(this.y*-1)-8-this.h,this.runw+10,this.runh);
 					}
 					else
-					ctx.drawImage(this.img,14+(this.deathframe*64),212,34,36,this.x-6,this.y-8,this.runw+10,this.runh);
+						ctx.drawImage(this.img,14+(this.deathframe*64),212,34,36,this.x-6,this.y-8,this.runw+10,this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.deathtickmax){
@@ -311,24 +315,42 @@ var Game = function(){
 		}
 		
 		if(game.key && game.key == 39)	// Right arrow
-			{game.player.x += 6;}
+			{game.player.x += 6, game.player.y += 0;}
 			if(game.player.x < 0)
 				game.player.x = 0;
+		
 		if(game.key && game.key == 37) // Left Arrow
-			{game.player.x -= 6;}
+			{game.player.x -= 6, game.player.y += 0;}
 				if(game.player.x + game.player.w > canvas.width)
 					game.player.x = canvas.width - game.player.w;
-		if(game.key && game.key == 38) // Up Arrow
-			{game.player.y -= 30, game.player.movestat = 3;}
-				if(game.player.y < 0)
+		
+		if(game.key && game.key == 38) {  // Up Arrow
+			if(game.player.jumping === false){
+				game.player.jumping = true;
+			}
+				/*game.player.jumpForce = initialJumpForce;
+				var netForce = game.player.jumpForce - game.player.gravity;
+				var dTime = 1/60;
+				game.player.y += netForce * dTime; */
+				game.player.y -= 30, game.player.y += 0, game.player.movestat = 3;
+			}
+				if(game.player.y < 0){
 					game.player.y = 0;
+				}
 							
 		if(game.key && game.key == 40) // Down arrow
 			{game.player.y += 70;}
 				if(game.player.y > canvas.height)
 					game.player.y = canvas.height;
-		if(game.key && game.key == 32) //Spacebar
-			{game.player.y -= 10;} 
+
+		if(game.key && game.key == 32) { //Spacebar
+			if(game.player.gravityReversed)
+				game.player.gravityReversed = false;
+			else if(game.player.gravityReversed === false)
+				game.player.gravityReversed = true;
+				game.player.gravity = -game.player.gravity;
+		;} 
+			 
 		game.player.y = game.player.y + game.player.gravitySpeed;
 		game.player.hitBottom();
 	}
@@ -339,9 +361,10 @@ var Game = function(){
 			game.player.y = rockbottom;
 			game.player.movestat = 1;
 			game.player.gravitySpeed = 0;
+			game.player.jumping = false;
 		}
 	}
-		
+	
 		/*game.obstacles.forEach(function(game.obstacle) { //PLACEHOLDER Needs fixing
 			game.obstacle.update();
 		});
