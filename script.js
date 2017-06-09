@@ -5,8 +5,7 @@
 var canvas 	= document.getElementById("canvas"),
        ctx 	= canvas.getContext("2d");
 var	bg 		= document.createElement('canvas'),
-	bgtx	= bg.getContext('2d');
-       
+	bgtx	= bg.getContext('2d');   
 canvas.style.position 		= "absolute";
 canvas.style.zIndex   		= 1;
 canvas.width 				= window.innerWidth;
@@ -17,7 +16,6 @@ bg.style.backgroundColor 	= "#758a88";
 bg.width					= window.innerWidth;
 bg.height					= window.innerHeight;
 document.body.appendChild(bg);
-const initialJumpForce = 30;
 /////////////////////
 //The game itself
 /////////////////////
@@ -43,7 +41,6 @@ var Game = function(){
 		runframemax: 5,
 		runtickmax: 6,
 		jumping: false,
-		jumpForce: 0,
 		jumpframe: 0,
 		jumpframemax: 6,
 		jumptickmax: 6,
@@ -54,7 +51,7 @@ var Game = function(){
 		attackframe: 0,
 		attackframemax: 5,
 		attacktickmax: 3, //frame data ends here
-		gravity: 1.2,
+		gravity: 0.65,
 		gravitySpeed: 0,
 		gravityReversed: false,
 		img: null
@@ -148,7 +145,7 @@ var Game = function(){
 							}
 						else
 							this.jumpframe--;
-					}
+					}				
 					break;
 			case 4:	//landing animation
 					if (this.gravityReversed){
@@ -167,6 +164,7 @@ var Game = function(){
 						this.tick = 0;
 						this.jumpframe++;
 					}
+					game.player.movestat = 1;
 					break;
 			case 5:	//death animation
 					if (this.gravityReversed){
@@ -250,10 +248,9 @@ var Game = function(){
 	
 		return I;
 	} */
-	
 /////////////////////
 //Coins
-/////////////////////
+/////////////////////	
 	this.imgcoin = new Image();
 	this.imgcoin.src = "sprites/coin/full_coins.png";
 	this.Coin = function(coinx, coiny){
@@ -305,9 +302,9 @@ var Game = function(){
 			}
 		}
 	}
-/////////////////////
-//Score
-/////////////////////
+//////////////////////////
+//Score & Event Listeners
+//////////////////////////
 	this.score = {
 		x: 5,
 		y: 35,
@@ -329,6 +326,20 @@ var Game = function(){
 		
 		window.addEventListener("keyup", function (e) {
             game.key = false;
+        })		
+		window.addEventListener("keydown", function(e) {
+			if(e.repeat)
+				return;
+			console.log(e);
+			if (!(game.player.movestat === 5)){
+				game.key = e.keyCode;
+			}
+		})
+		
+		window.addEventListener("keyup", function (e) {
+		   game.key = false;
+		   if(e.repeat)
+			   return;
         })
 /////////////////////
 //Animation
@@ -344,58 +355,53 @@ var Game = function(){
 		coin.coinanimate(); //in future coins will be animated here, before the player
 		game.player.playeranimate();
 		
+		if(game.player.x < 0){
+			game.player.x = 0;
+		}
+		if(game.player.y < 0){
+			game.player.y = 0;	
+		}
+		if(game.player.x + game.player.w > canvas.width){
+			game.player.x = canvas.width - game.player.w;
+		}
+		
 		if(game.player.movestat === 3){
 			game.player.gravitySpeed += game.player.gravity;
 		}
 		
-		if(game.key && game.key == 39)	// Right arrow
-			{game.player.x += 6, game.player.y += 0;}
-			if(game.player.x < 0)
-				game.player.x = 0;
-		
-		if(game.key && game.key == 37) // Left Arrow
-			{game.player.x -= 6, game.player.y += 0;}
-				if(game.player.x + game.player.w > canvas.width)
-					game.player.x = canvas.width - game.player.w;
-		
-		if(game.key && game.key == 38) {  // Up Arrow
-			if(game.player.jumping === false){
-				game.player.jumping = true;
-			}
-				/*game.player.jumpForce = initialJumpForce;
-				var netForce = game.player.jumpForce - game.player.gravity;
-				var dTime = 1/60;
-				game.player.y += netForce * dTime; */
-				game.player.y -= 30, game.player.y += 0, game.player.movestat = 3;
-			}
-				if(game.player.y < 0){
-					game.player.y = 0;
-				}
-							
-		if(game.key && game.key == 40) // Down arrow
-			{game.player.y += 70;}
-				if(game.player.y > canvas.height)
-					game.player.y = canvas.height;
+		if(game.key && game.key == 39){	// Right arrow
+			game.player.x += 6, game.player.y += 0;
+		}
 
-		if(game.key && game.key == 32) { //Spacebar
+		
+		if(game.key && game.key == 37){ // Left Arrow
+			game.player.x -= 6, game.player.y += 0;
+		}
+
+		
+		if(game.key && game.key == 38 && game.player.jumping === false){  // Up Arrow
+			game.player.y -= 20, game.player.y += 0, game.player.movestat = 3;
+			//game.player.jumping = true;
+		}
+
+		if(game.key && game.key == 32 && game.player.movestat === 3){ //Spacebar
 			if(game.player.gravityReversed)
 				game.player.gravityReversed = false;
 			else if(game.player.gravityReversed === false)
 				game.player.gravityReversed = true;
 				game.player.gravity = -game.player.gravity;
-		;} 
-			 
+		}
 		game.player.y = game.player.y + game.player.gravitySpeed;
 		game.player.hitBottom();
 	}
 /////////////////////
 //Other functions
-/////////////////////
+/////////////////////	
 	this.player.hitBottom = function() {
 		var rockbottom = canvas.height - game.player.h;
 		if(game.player.y > rockbottom) {
 			game.player.y = rockbottom;
-			game.player.movestat = 1;
+			game.player.movestat = 4;
 			game.player.gravitySpeed = 0;
 			game.player.jumping = false;
 		}
@@ -416,9 +422,9 @@ var Game = function(){
 		game.obstacle.draw();*/
 	
 }
-/////////////////////
+/////////////////////////
 //Current initialization
-/////////////////////
+/////////////////////////
 var game = new Game();
 var backgroundbase = new game.Background(1);
 	backgroundbase.img = game.imgbackgroundback;
