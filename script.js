@@ -44,6 +44,7 @@ var Game = function(){
 		attacktickmax: 3, //frame data ends here
 		gravity: 0.05,
 		gravitySpeed: 0,
+		gravityReversed: false,
 		img: null
 	};
 	this.img = new Image();
