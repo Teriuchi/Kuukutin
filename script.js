@@ -265,11 +265,12 @@ var Game = function(){
 				if(game.player.x + game.player.w > canvas.width)
 					game.player.x = canvas.width - game.player.w;
 		if(game.key && game.key == 38) // Up Arrow
-			{game.player.y -= 4;}
+			{game.player.y -= 30, game.player.movestat = 3;}
 				if(game.player.y < 0)
 					game.player.y = 0;
+							
 		if(game.key && game.key == 40) // Down arrow
-			{game.player.y += 4;}
+			{game.player.y += 70;}
 				if(game.player.y > canvas.height)
 					game.player.y = canvas.height;
 		if(game.key && game.key == 32) //Spacebar
@@ -282,8 +283,9 @@ var Game = function(){
 		var rockbottom = canvas.height - game.player.h;
 		if(game.player.y > rockbottom) {
 			game.player.y = rockbottom;
+			game.player.movestat = 1;
+			game.player.gravitySpeed = 0;
 		}
-	}
 		
 		/*game.obstacles.forEach(function(game.obstacle) { //PLACEHOLDER Needs fixing
 			game.obstacle.update();
