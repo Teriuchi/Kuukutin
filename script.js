@@ -1,9 +1,18 @@
-var canvas = document.getElementById("canvas"),
-       ctx = canvas.getContext("2d");
+var canvas 	= document.getElementById("canvas"),
+       ctx 	= canvas.getContext("2d");
+var	bg 		= document.createElement('canvas'),
+	bgtx	= bg.getContext('2d');
        
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-canvas.style.backgroundColor = "blue";
+canvas.style.position 	= "absolute";
+canvas.style.zIndex   	= 1;
+canvas.width 			= window.innerWidth;
+canvas.height 			= window.innerHeight;
+bg.style.position 		= "absolute";
+bg.style.zIndex   		= -1;
+bg.style.backgroundColor 	= "#758a88";
+bg.width				= window.innerWidth;
+bg.height				= window.innerHeight;
+document.body.appendChild(bg);
 
 var Game = function(){
 	this.player = {
@@ -202,6 +211,26 @@ var Game = function(){
 			}
 		}
 	}
+	this.imgbackgroundbase = new Image();
+	this.imgbackgroundbase.src = "sprites/background/cave_layermain.png";
+	this.imgbackgroundmiddle = new Image();
+	this.imgbackgroundmiddle.src = "sprites/background/cave_layermid.png";
+	this.imgbackgroundback = new Image();
+	this.imgbackgroundback.src = "sprites/background/cave_layerback.png";
+	this.Background = function(speedx){
+		this.speed = speedx;
+		this.x = 0;
+		this.y = 0;
+		this.img;
+		this.draw = function(){
+			this.x -= this.speed;
+			bgtx.drawImage(this.img, 0, 0, 2000, 2000, this.x, this.y, bg.width, bg.height);
+			bgtx.drawImage(this.img, 0, 0, 2000, 2000, this.x + canvas.width, this.y, bg.width, bg.height);
+			if (this.x <= 0 - canvas.width){
+				this.x = 0;
+			}
+		}
+	}
 		
 		window.addEventListener("keydown", function(e) {
 			if (!(game.player.movestat === 5)){
@@ -216,6 +245,10 @@ var Game = function(){
 	this.animate = function(){
 		requestAnimationFrame(game.animate);
 		ctx.clearRect(0,0,canvas.width,canvas.height);
+		bgtx.clearRect(0,0,canvas.width,canvas.height);
+		backgroundbase.draw();
+		backgroundmid.draw();
+		backgroundback.draw();
 		coin.coinanimate(); //in future coins will be animated here, before the player
 		game.player.playeranimate();
 		
@@ -268,5 +301,11 @@ var Game = function(){
 	
 }
 var game = new Game();
+var backgroundbase = new game.Background(1);
+	backgroundbase.img = game.imgbackgroundback;
+var backgroundmid = new game.Background(2);
+	backgroundmid.img = game.imgbackgroundmiddle;
+var backgroundback = new game.Background(3);
+	backgroundback.img = game.imgbackgroundbase;
 var coin = new game.Coin(200, 100); //placeholder, remove once coin spawning has been implemented
 window.onload = game.animate();
