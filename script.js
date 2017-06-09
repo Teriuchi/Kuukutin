@@ -103,7 +103,8 @@ var Game = function(){
 						ctx.scale(1, -1);
 						ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
 					}
-					ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+					else
+						ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
 					if (this.tick <= this.jumptickmax){
 						this.tick++;
 					}
@@ -121,7 +122,8 @@ var Game = function(){
 						ctx.scale(1, -1);
 						ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
 					}
-					ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+					else
+						ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.jumplooptickmax){
@@ -142,7 +144,8 @@ var Game = function(){
 						ctx.scale(1, -1);
 						ctx.drawImage(this.img,18+(7*64),338,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
 					}
-					ctx.drawImage(this.img,18+(7*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+					else
+						ctx.drawImage(this.img,18+(7*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.jumptickmax){
@@ -159,6 +162,7 @@ var Game = function(){
 						ctx.scale(1, -1);
 						ctx.drawImage(this.img,14+(this.deathframe*64),212,34,36,this.x-6,(this.y*-1)-8-this.h,this.runw+10,this.runh);
 					}
+					else
 					ctx.drawImage(this.img,14+(this.deathframe*64),212,34,36,this.x-6,this.y-8,this.runw+10,this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
@@ -180,7 +184,8 @@ var Game = function(){
 						ctx.scale(1, -1);
 						ctx.drawImage(this.img,18+(this.attackframe*64),148,30,36,this.x,(this.y*-1)-8-this.h,this.runw,this.runh);
 					}
-					ctx.drawImage(this.img,18+(this.attackframe*64),148,30,36,this.x,this.y-8,this.runw,this.runh);
+					else
+						ctx.drawImage(this.img,18+(this.attackframe*64),148,30,36,this.x,this.y-8,this.runw,this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.attacktickmax){
