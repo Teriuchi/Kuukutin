@@ -41,6 +41,8 @@ var Game = function(){
 		runframe: 0,
 		runframemax: 5,
 		runtickmax: 6,
+		jumpcd: 0,
+		jumpcd_time: 60,
 		jumpframe: 0,
 		jumpframemax: 6,
 		jumptickmax: 6,
@@ -53,7 +55,7 @@ var Game = function(){
 		attacktickmax: 3, //frame data ends here
 		gravity: 0.4,
 		gravitycd: 0,
-		gravitycd_time: 180,
+		gravitycd_time: 120,
 		gravitySpeed: 0,
 		gravityReversed: false,
 		img: null
@@ -223,34 +225,6 @@ var Game = function(){
 /////////////////////
 	var obstacles = [];
 	
-	/*function Obstacle(I) {					//PLACEHOLDER Needs fixing
-		I.active = true;
-		I.color = "white";
-		I.y = 0;
-		I.x = 1000;
-		I.width = 30;
-		I.height = Math.random() * 1000 + 1;
-	
-		I.inBounds = function() {
-			return I.x >= 0 && I.x <= window.width && 
-			I.y >= 0 && I.y <= window.height;
-		};
-	
-		I.draw = function() {
-			this.draw() = function() {
-				canvas.fillStyle = this.color;
-				canvas.fillRect(this.x, this.y, this.width, this.height);
-			}
-		}
-		
-		I.update = function() {
-			I.x -= 1;
-			I.y = I.y;
-			I.active = I.active & I.inBounds();
-		};
-	
-		return I;
-	} */
 /////////////////////
 //Coins
 /////////////////////	
@@ -321,7 +295,7 @@ var Game = function(){
 	this.score.draw = function(){
 		ctx.fillStyle = this.color;
 		ctx.font = this.font;
-		ctx.fillText("Points: "+this.score,this.x,this.y);
+		ctx.fillText("Score: "+this.score,this.x,this.y);
 		if(game.score.scoreTick < game.score.scoreTickMax){
 			game.score.scoreTick++;
 		}else{
@@ -342,22 +316,16 @@ var Game = function(){
 		   if(e.repeat)
 			   return;
         })
-/////////////////////
-//Animation
-/////////////////////
-	this.animate = function(){
-		requestAnimationFrame(game.animate);
-		ctx.clearRect(0,0,canvas.width,canvas.height);
-		bgtx.clearRect(0,0,canvas.width,canvas.height);
-		backgroundbase.draw();
-		backgroundmid.draw();
-		backgroundback.draw();
-		game.score.draw();
-		coin.coinanimate(); //in future coins will be animated here, before the player
-		game.player.playeranimate();
 		
+////////////////////////
+//Movement
+////////////////////////
+	this.movement = function(){
 		if(game.player.gravitycd > 0)
 			game.player.gravitycd--;
+		
+		if(game.player.jumpcd < game.player.jumpcd_time)
+			game.player.jumpcd++;
 		
 		if(game.player.x < 0){
 			game.player.x = 0;
@@ -376,25 +344,24 @@ var Game = function(){
 		}
 		
 		if(game.key && game.key == 39){	// Right arrow
-			game.player.x += 6, game.player.y += 0;
+			game.player.x += 6;
 		}
-
 		
 		if(game.key && game.key == 37){ // Left Arrow
-			game.player.x -= 6, game.player.y += 0;
+			game.player.x -= 6;
 		}
 		
 		if(game.key && game.key == 38){  // Up Arrow
 			if(game.player.gravityReversed === false) {
 				if(game.player.y >= 0 && game.player.y <= game.player.y_max)
-					game.player.y -= 17, game.player.y += 0, game.player.movestat = 3;
+					game.player.y -= 17, game.player.movestat = 3;
 			}
 			else {
 				if(game.player.y < canvas.height && game.player.y < game.player.y_max)
-					game.player.y += 17, game.player.y += 0, game.player.movestat = 3;
+					game.player.y += 17, game.player.movestat = 3;
 			}
 		}
-
+		
 		if(game.key && game.key == 32 && game.player.movestat === 3){ //Spacebar
 			if(game.player.gravityReversed){
 				if(game.player.gravitycd === 0){
@@ -411,13 +378,9 @@ var Game = function(){
 				}
 			}	
 		}
-		game.player.y = game.player.y + game.player.gravitySpeed;
-		game.player.hitBottom();
 	}
-/////////////////////
-//Other functions
-/////////////////////	
-	this.player.hitBottom = function() {
+	
+		this.player.hitBottom = function() {
 		var rockbottom = game.player.y_max;
 		if(game.player.y > rockbottom && game.player.gravityReversed === false) {
 			game.player.y = rockbottom;
@@ -430,21 +393,24 @@ var Game = function(){
 			game.player.gravitySpeed = 0;
 		}
 	}	
-	
-		/*game.obstacles.forEach(function(game.obstacle) { //PLACEHOLDER Needs fixing
-			game.obstacle.update();
-		});
-		
-		game.obstacles = game.obstacle.filter(function(game.obstacle) {
-			return game.obstacle.active;
-		});
-		
-		if(game.player.tick == 0){
-			game.obstacles.push(Obstacle());
-		}
-		
-		game.obstacle.draw();*/
-	
+
+////////////////////////
+//Animation
+////////////////////////
+	this.animate = function(){
+		requestAnimationFrame(game.animate);
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		bgtx.clearRect(0,0,canvas.width,canvas.height);
+		backgroundbase.draw();
+		backgroundmid.draw();
+		backgroundback.draw();
+		game.score.draw();
+		coin.coinanimate(); //in future coins will be animated here, before the player
+		game.player.playeranimate();
+		game.player.y = game.player.y + game.player.gravitySpeed;
+		game.player.hitBottom();
+		game.movement();
+	}
 }
 /////////////////////////
 //Current initialization
