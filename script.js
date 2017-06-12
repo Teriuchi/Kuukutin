@@ -32,7 +32,9 @@ var Game = function(){
 		runw: 56,
 		runh: 72,
 		diry: 1,
-		dirx: 1,
+		dirx: 0,
+		speed: 7,
+		jumpspeed: 18,
 		movestat: 1,
 		tick: 0,	//frame data starts from here
 		idleframe: 0,
@@ -41,8 +43,6 @@ var Game = function(){
 		runframe: 0,
 		runframemax: 5,
 		runtickmax: 6,
-		jumpcd: 0,
-		jumpcd_time: 60,
 		jumpframe: 0,
 		jumpframemax: 6,
 		jumptickmax: 6,
@@ -53,11 +53,14 @@ var Game = function(){
 		attackframe: 0,
 		attackframemax: 5,
 		attacktickmax: 3, //frame data ends here
-		gravity: 0.4,
-		gravitycd: 0,
-		gravitycd_time: 120,
-		gravitySpeed: 0,
+		falling: false,
+		jumptimetotal: 0,
+		jumping: false,
+		onground: true,
+		gravitytick: 0,
+		gravitynegative: 1,
 		gravityReversed: false,
+		gravityspamblock: false,
 		img: null
 	};
 	this.img = new Image();
@@ -320,80 +323,113 @@ var Game = function(){
 ////////////////////////
 //Movement
 ////////////////////////
-	this.movement = function(){
-		if(game.player.gravitycd > 0)
-			game.player.gravitycd--;
-		
-		if(game.player.jumpcd < game.player.jumpcd_time)
-			game.player.jumpcd++;
-		
-		if(game.player.x < 0){
-			game.player.x = 0;
+	this.player.movement = function(){
+		switch(this.dirx){
+			case -1: this.x -= this.speed;
+					break;
+			case 0:
+					break;
+			case 1: this.x += this.speed;
+					break;
+			default:
 		}
-		
-		if(game.player.y < 0){
-			game.player.y = 0;	
-		}
-		
-		if(game.player.x + game.player.w > canvas.width){
-			game.player.x = canvas.width - game.player.w;
-		}
-		
-		if(game.player.movestat === 3){
-			game.player.gravitySpeed += game.player.gravity;
-		}
-		
-		if(game.key && game.key == 39){	// Right arrow
-			game.player.x += 6;
-		}
-		
-		if(game.key && game.key == 37){ // Left Arrow
-			game.player.x -= 6;
-		}
-		
-		if(game.key && game.key == 38){  // Up Arrow
-			if(game.player.gravityReversed === false) {
-				if(game.player.y >= 0 && game.player.y <= game.player.y_max)
-					game.player.y -= 17, game.player.movestat = 3;
-			}
-			else {
-				if(game.player.y < canvas.height && game.player.y < game.player.y_max)
-					game.player.y += 17, game.player.movestat = 3;
-			}
-		}
-		
-		if(game.key && game.key == 32 && game.player.movestat === 3){ //Spacebar
-			if(game.player.gravityReversed){
-				if(game.player.gravitycd === 0){
-					game.player.gravitycd = game.player.gravitycd_time;
-					game.player.gravityReversed = false;
-					game.player.gravity = -game.player.gravity;
+		if (this.onground === false){
+			if (this.falling === false){
+				this.jumptimetotal += 0.4;
+				this.y -= (this.jumpspeed - this.jumptimetotal)*this.gravitynegative;
+				if (this.jumptimetotal === this.jumpspeed){
+					this. falling = true;
 				}
 			}
-			else if(game.player.gravityReversed === false){
-				if(game.player.gravitycd === 0){
-					game.player.gravitycd = game.player.gravitycd_time;
-					game.player.gravityReversed = true;
-					game.player.gravity = -game.player.gravity;
-				}
-			}	
+			else{
+				this.jumptimetotal += 0.8;
+				this.y += (this.jumptimetotal - this.jumpspeed)*this.gravitynegative;
+			}
 		}
-	}
-	
-		this.player.hitBottom = function() {
-		var rockbottom = game.player.y_max;
-		if(game.player.y > rockbottom && game.player.gravityReversed === false) {
-			game.player.y = rockbottom;
-			game.player.movestat = 4;
-			game.player.gravitySpeed = 0;
+		if (this.falling === true){
+			if (this.y+this.h >= canvas.height){
+				this.onground = true;
+				this.y = canvas.height-this.h;
+				this.jumptimetotal = 0;
+				this.falling = false;
+				this.jumping = false;
+				this.movestat = 1;
+			}
+			if (this.y <= 0){
+				this.onground = true;
+				this.y = 0;
+				this.jumptimetotal = 0;
+				this.falling = false;
+				this.jumping = false;
+				this.movestat = 1;
+			}
 		}
-		else if(game.player.y < 0 && game.player.gravityReversed === true){
-			game.player.y = 0;
-			game.player.movestat = 4;
-			game.player.gravitySpeed = 0;
-		}
+		
 	}	
+/////////////////////
+//Controls
+/////////////////////
 
+window.addEventListener("keydown", function (event) {
+  if (event.defaultPrevented) {
+    return;
+  }
+
+  switch (event.which) {
+    case 32: 	
+			if (game.player.jumping === true && game.player.gravityspamblock === false){
+				game.player.gravityspamblock = true;
+				if(game.player.gravityReversed){
+					game.player.gravityReversed = false;
+				}
+				else{
+					game.player.gravityReversed = true;
+				}
+				game.player.gravitynegative = game.player.gravitynegative*-1;
+			}
+		break;
+    case 37: game.player.dirx = -1;
+		break;
+    case 38:if(game.player.onground){
+			game.player.onground = false;
+			game.player.jumping = true;
+			game.player.movestat = 3;
+		}
+		break;
+    case 39: game.player.dirx = 1;
+		break;
+    case 40:
+		break;
+    default:
+      return;
+  }
+  event.preventDefault();
+}, true);
+
+window.addEventListener("keyup", function (event) {
+  if (event.defaultPrevented) {
+    return;
+  }
+
+  switch (event.which) {
+    case 32: game.player.gravityspamblock = false;
+		break;
+    case 37:if (game.player.dirx === -1) 
+					game.player.dirx = 0;
+		break;
+    case 38:
+			game.player.falling = true;
+		break;
+    case 39: if (game.player.dirx === 1) 
+					game.player.dirx = 0;
+		break;
+    case 40:
+		break;
+    default:
+      return;
+  }
+  event.preventDefault();
+}, true);
 ////////////////////////
 //Animation
 ////////////////////////
@@ -406,10 +442,8 @@ var Game = function(){
 		backgroundback.draw();
 		game.score.draw();
 		coin.coinanimate(); //in future coins will be animated here, before the player
+		game.player.movement();
 		game.player.playeranimate();
-		game.player.y = game.player.y + game.player.gravitySpeed;
-		game.player.hitBottom();
-		game.movement();
 	}
 }
 /////////////////////////
