@@ -11,3 +11,7 @@ Credits:
 - Background image by PWL 
 
 	opengameart.org/content/seamless-cave-background
+	
+- Obstacle design by devouliin.com
+
+	opengameart.org/content/game-asset-brick-game-obstacles
