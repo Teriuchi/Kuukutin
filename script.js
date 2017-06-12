@@ -26,6 +26,7 @@ var Game = function(){
 	this.player = {
 		x: 100,
 		y: canvas.height - 60,
+		y_max: canvas.height - 60,
 		w: 52,
 	   	h: 60,
 		runw: 56,
@@ -50,7 +51,9 @@ var Game = function(){
 		attackframe: 0,
 		attackframemax: 5,
 		attacktickmax: 3, //frame data ends here
-		gravity: 0.65,
+		gravity: 0.4,
+		gravitycd: 0,
+		gravitycd_time: 180,
 		gravitySpeed: 0,
 		gravityReversed: false,
 		img: null
@@ -306,16 +309,25 @@ var Game = function(){
 //Score & Event Listeners
 //////////////////////////
 	this.score = {
+		scoreTick: 0,
+		scoreTickMax: 40,
 		x: 5,
 		y: 35,
 		font: "30px Courier New",
 		color: "white",
 		score: 0
 	};
+	
 	this.score.draw = function(){
 		ctx.fillStyle = this.color;
 		ctx.font = this.font;
 		ctx.fillText("Points: "+this.score,this.x,this.y);
+		if(game.score.scoreTick < game.score.scoreTickMax){
+			game.score.scoreTick++;
+		}else{
+			game.score.score = game.score.score + 1;
+			game.score.scoreTick = 0;
+		}
 	}	
 		window.addEventListener("keydown", function(e) {
 			if(e.repeat)
@@ -344,12 +356,17 @@ var Game = function(){
 		coin.coinanimate(); //in future coins will be animated here, before the player
 		game.player.playeranimate();
 		
+		if(game.player.gravitycd > 0)
+			game.player.gravitycd--;
+		
 		if(game.player.x < 0){
 			game.player.x = 0;
 		}
+		
 		if(game.player.y < 0){
 			game.player.y = 0;	
 		}
+		
 		if(game.player.x + game.player.w > canvas.width){
 			game.player.x = canvas.width - game.player.w;
 		}
@@ -369,21 +386,29 @@ var Game = function(){
 		
 		if(game.key && game.key == 38){  // Up Arrow
 			if(game.player.gravityReversed === false) {
-				game.player.y -= 20, game.player.y += 0, game.player.movestat = 3;
+				if(game.player.y >= 0 && game.player.y <= game.player.y_max)
+					game.player.y -= 17, game.player.y += 0, game.player.movestat = 3;
 			}
 			else {
-				game.player.y += 20, game.player.y += 0, game.player.movestat = 3;
+				if(game.player.y < canvas.height && game.player.y < game.player.y_max)
+					game.player.y += 17, game.player.y += 0, game.player.movestat = 3;
 			}
 		}
 
 		if(game.key && game.key == 32 && game.player.movestat === 3){ //Spacebar
 			if(game.player.gravityReversed){
-				game.player.gravityReversed = false;
-				game.player.gravity = -game.player.gravity;
+				if(game.player.gravitycd === 0){
+					game.player.gravitycd = game.player.gravitycd_time;
+					game.player.gravityReversed = false;
+					game.player.gravity = -game.player.gravity;
+				}
 			}
 			else if(game.player.gravityReversed === false){
-				game.player.gravityReversed = true;
-				game.player.gravity = -game.player.gravity;
+				if(game.player.gravitycd === 0){
+					game.player.gravitycd = game.player.gravitycd_time;
+					game.player.gravityReversed = true;
+					game.player.gravity = -game.player.gravity;
+				}
 			}	
 		}
 		game.player.y = game.player.y + game.player.gravitySpeed;
@@ -393,13 +418,13 @@ var Game = function(){
 //Other functions
 /////////////////////	
 	this.player.hitBottom = function() {
-		var rockbottom = canvas.height - game.player.h;
-		if(game.player.y > rockbottom) {
+		var rockbottom = game.player.y_max;
+		if(game.player.y > rockbottom && game.player.gravityReversed === false) {
 			game.player.y = rockbottom;
 			game.player.movestat = 4;
 			game.player.gravitySpeed = 0;
 		}
-		else if(game.player.y < 0){
+		else if(game.player.y < 0 && game.player.gravityReversed === true){
 			game.player.y = 0;
 			game.player.movestat = 4;
 			game.player.gravitySpeed = 0;
