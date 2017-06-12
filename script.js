@@ -360,6 +360,7 @@ var Game = function(){
 				this.falling = false;
 				this.jumping = false;
 				this.movestat = 1;
+				this.gravityspamblock = false;
 			}
 			if (this.y <= 0){
 				this.onground = true;
@@ -368,6 +369,7 @@ var Game = function(){
 				this.falling = false;
 				this.jumping = false;
 				this.movestat = 1;
+				this.gravityspamblock = false;
 			}
 		}
 		
@@ -382,26 +384,25 @@ window.addEventListener("keydown", function (event) {
   }
 
   switch (event.which) {
-    case 32: 	
-			if (game.player.jumping === true && game.player.gravityspamblock === false){
+    case 32: if (game.player.jumping === true && game.player.gravityspamblock === false){
 				game.player.gravityspamblock = true;
-				if(game.player.gravityReversed){
-					game.player.gravityReversed = false;
-				}
-				else{
-					game.player.gravityReversed = true;
-				}
+			 if(game.player.gravityReversed){
+				game.player.gravityReversed = false;
+			 }
+			 else{
+				game.player.gravityReversed = true;
+			 }
 				game.player.gravitynegative = game.player.gravitynegative*-1;
-			}
-		break;
+			 }
+			 break;
     case 37: game.player.dirx = -1;
-		break;
-    case 38:if(game.player.onground){
-			game.player.onground = false;
-			game.player.jumping = true;
-			game.player.movestat = 3;
-		}
-		break;
+			 break;
+    case 38: if(game.player.onground){
+				game.player.onground = false;
+				game.player.jumping = true;
+				game.player.movestat = 3;
+			 }
+			 break;
     case 39: game.player.dirx = 1;
 		break;
     case 40:
@@ -418,7 +419,7 @@ window.addEventListener("keyup", function (event) {
   }
 
   switch (event.which) {
-    case 32: game.player.gravityspamblock = false;
+    case 32: 
 		break;
     case 37:if (game.player.dirx === -1) 
 					game.player.dirx = 0;
