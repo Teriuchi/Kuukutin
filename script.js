@@ -4,7 +4,7 @@
 /////////////////////
 var canvas 	= document.getElementById("canvas"),
        ctx 	= canvas.getContext("2d");
-var	bg 		= document.createElement('canvas'),
+var	bg 	= document.createElement('canvas'),
 	bgtx	= bg.getContext('2d');   
 canvas.style.position 		= "absolute";
 canvas.style.zIndex   		= 1;
@@ -12,9 +12,9 @@ canvas.width 				= window.innerWidth;
 canvas.height 				= window.innerHeight;
 bg.style.position 			= "absolute";
 bg.style.zIndex   			= -1;
-bg.style.backgroundColor 	= "#758a88";
-bg.width					= window.innerWidth;
-bg.height					= window.innerHeight;
+bg.style.backgroundColor 		= "#758a88";
+bg.width				= window.innerWidth;
+bg.height				= window.innerHeight;
 document.body.appendChild(bg);
 /////////////////////
 //The game itself
