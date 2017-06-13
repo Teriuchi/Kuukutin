@@ -283,7 +283,7 @@ var Game = function(){
 		}
 	}
 //////////////////////////
-//Score & Event Listeners
+//Score
 //////////////////////////
 	this.score = {
 		scoreTick: 0,
@@ -306,19 +306,6 @@ var Game = function(){
 			game.score.scoreTick = 0;
 		}
 	}	
-		window.addEventListener("keydown", function(e) {
-			if(e.repeat)
-				return;
-			if (!(game.player.movestat === 5)){
-				game.key = e.keyCode;
-			}
-		})
-		
-		window.addEventListener("keyup", function (e) {
-		   game.key = false;
-		   if(e.repeat)
-			   return;
-        })
 		
 ////////////////////////
 //Movement
@@ -330,8 +317,7 @@ var Game = function(){
 					 }
 						this.x -= this.speed;
 						break;
-			case 0:
-					break;
+			case 0: break;
 			case 1: if(this.x >= canvas.width - this.runw){
 						this.x = canvas.width - this.runw;
 					}
@@ -353,7 +339,7 @@ var Game = function(){
 			}
 		}
 		if (this.falling === true){
-			if (this.y+this.h >= canvas.height){
+			if (this.y+this.h >= canvas.height && this.gravityReversed === false){
 				this.onground = true;
 				this.y = canvas.height-this.h;
 				this.jumptimetotal = 0;
@@ -362,7 +348,7 @@ var Game = function(){
 				this.movestat = 1;
 				this.gravityspamblock = false;
 			}
-			if (this.y <= 0){
+			if (this.y <= 0 && this.gravityReversed === true){
 				this.onground = true;
 				this.y = 0;
 				this.jumptimetotal = 0;
@@ -372,7 +358,6 @@ var Game = function(){
 				this.gravityspamblock = false;
 			}
 		}
-		
 	}	
 /////////////////////
 //Controls
@@ -384,7 +369,7 @@ window.addEventListener("keydown", function (event) {
   }
 
   switch (event.which) {
-    case 32: if (game.player.jumping === true && game.player.gravityspamblock === false){
+    case 32: if (game.player.jumping === true && game.player.gravityspamblock === false){ //Spacebar
 				game.player.gravityspamblock = true;
 			 if(game.player.gravityReversed){
 				game.player.gravityReversed = false;
@@ -395,7 +380,7 @@ window.addEventListener("keydown", function (event) {
 				game.player.gravitynegative = game.player.gravitynegative*-1;
 			 }
 			 break;
-    case 37: game.player.dirx = -1;
+    case 37: game.player.dirx = -1; //Left Arrow
 			 break;
     case 38: if(game.player.onground){
 				game.player.onground = false;
@@ -403,9 +388,9 @@ window.addEventListener("keydown", function (event) {
 				game.player.movestat = 3;
 			 }
 			 break;
-    case 39: game.player.dirx = 1;
+    case 39: game.player.dirx = 1; // Right Arrow
 		break;
-    case 40:
+    case 40: //Up Arrow
 		break;
     default:
       return;
