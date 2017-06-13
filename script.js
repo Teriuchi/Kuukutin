@@ -237,7 +237,7 @@ var Game = function(){
 	this.imgobs = new Image();
 	this.imgobs.src = "sprites/obstacles/brick_2.png";
 	this.Obstacle = function(oy){
-		this.x = canvas.width + 101;
+		this.x = canvas.width + 100;
 		this.y = oy;
 		this.w;
 		this.h;
@@ -246,30 +246,33 @@ var Game = function(){
 			
 	}
 	this.Obstacle.prototype.drawWall = function(){
-		ctx.drawImage(this.img, 4, 0, 101, this.h*50, this.x, this.y, 101, this.h*50);
+		ctx.drawImage(this.img, 4, 0, 100, this.h*50, this.x, this.y, 100, this.h*50);
 	};
 	this.Obstacle.prototype.spawnWall = function(){
 		this.h = Math.ceil((Math.random()*4));
 		this.y -= this.h*50;
-		this.x -= game.floorTick;
+		this.x -= game.floorTick +15;
 	};
 	this.Obstacle.prototype.moveWall = function(){
-		this.x -= 4.8;
+		this.x -= 5;
 	};
 	
 	this.floors = function(){
-		let canvasBlocks = Math.ceil(canvas.width / 101) +1;
+		let canvasBlocks = Math.ceil(canvas.width / 100) +1;
 		for (let x=0;x<canvasBlocks;x++){
-			ctx.drawImage(this.imgobs, 4, 0, 101, 50, (x*101) - game.floorTick, canvas.height-20, 101, 50);
+			
+				ctx.drawImage(this.imgobs, 4, 0, 100, 50, (x*100) - game.floorTick, canvas.height-20, 100, 50);
 		}
 		for (let x=0;x<canvasBlocks;x++){
-			ctx.drawImage(this.imgobs, 4, 0, 101, 50, (x*101) - game.floorTick, -30, 101, 50);
+			
+				ctx.drawImage(this.imgobs, 4, 0, 100, 50, (x*100) - game.floorTick, -30, 100, 50);
 		}
 		if(game.floorTick >= game.floorTickMax){
 			game.floorTick = 0;
 		}
 		else{
 			game.floorTick += 5;
+			console.log(game.floorTick);
 		}
 	}
 /////////////////////
