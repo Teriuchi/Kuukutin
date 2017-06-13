@@ -21,6 +21,13 @@ document.body.appendChild(bg);
 /////////////////////
 var Game = function(){
 /////////////////////
+//Game variables
+/////////////////////
+
+	this.floorTick = 0;
+	this.floorTickMax = 100;
+
+/////////////////////
 //Player character
 /////////////////////
 	this.player = {
@@ -227,7 +234,45 @@ var Game = function(){
 //Obstacles
 /////////////////////
 	var obstacles = [];
+	this.imgobs = new Image();
+	this.imgobs.src = "sprites/obstacles/brick_2.png";
+	this.Obstacle = function(oy){
+		this.x = canvas.width + 101;
+		this.y = oy;
+		this.w;
+		this.h;
+		this.img = game.imgobs;
+		
+			
+	}
+	this.Obstacle.prototype.drawWall = function(){
+		ctx.drawImage(this.img, 4, 0, 101, this.h*50, this.x, this.y, 101, this.h*50);
+	};
+	this.Obstacle.prototype.spawnWall = function(){
+		this.h = Math.ceil((Math.random()*4));
+		this.y -= this.h*50;
+		this.x -= game.floorTick;
+	};
+	this.Obstacle.prototype.moveWall = function(){
+		this.x -= 4.8;
+	};
 	
+	this.floors = function(){
+		let canvasBlocks = Math.ceil(canvas.width / 101) +1;
+		for (let x=0;x<canvasBlocks;x++){
+			ctx.drawImage(this.imgobs, 4, 0, 101, 50, (x*101) - game.floorTick, canvas.height-20, 101, 50);
+		}
+		for (let x=0;x<canvasBlocks;x++){
+			ctx.drawImage(this.imgobs, 4, 0, 101, 50, (x*101) - game.floorTick, -30, 101, 50);
+		}
+		if(game.floorTick >= game.floorTickMax){
+			game.floorTick = 0;
+		}
+		else{
+			game.floorTick += 5;
+			console.log(game.floorTick);
+		}
+	}
 /////////////////////
 //Coins
 /////////////////////	
@@ -289,7 +334,7 @@ var Game = function(){
 		scoreTick: 0,
 		scoreTickMax: 40,
 		x: 5,
-		y: 35,
+		y: 45,
 		font: "30px Courier New",
 		color: "white",
 		score: 0
@@ -312,13 +357,16 @@ var Game = function(){
 ////////////////////////
 	this.player.movement = function(){
 		switch(this.dirx){
-			case -1: if(this.x <= 4){
+			case -1:this.movestat = 0; 
+				if(this.x <= 4){
 						this.x = 4;
 					 }
 						this.x -= this.speed;
 						break;
-			case 0: break;
-			case 1: if(this.x >= canvas.width - this.runw){
+			case 0: this.movestat = 1;
+				break;
+			case 1: this.movestat = 1;
+				if(this.x >= canvas.width - this.runw){
 						this.x = canvas.width - this.runw;
 					}
 						this.x += this.speed;
@@ -326,6 +374,7 @@ var Game = function(){
 			default:
 		}
 		if (this.onground === false){
+			this.movestat = 3;
 			if (this.falling === false){
 				this.jumptimetotal += 0.4;
 				this.y -= (this.jumpspeed - this.jumptimetotal)*this.gravitynegative;
@@ -385,7 +434,6 @@ window.addEventListener("keydown", function (event) {
     case 38: if(game.player.onground){
 				game.player.onground = false;
 				game.player.jumping = true;
-				game.player.movestat = 3;
 			 }
 			 break;
     case 39: game.player.dirx = 1; // Right Arrow
@@ -449,8 +497,11 @@ window.addEventListener("keyup", function (event) {
 		backgroundbase.draw();
 		backgroundmid.draw();
 		backgroundback.draw();
+		game.floors();
+		obs.moveWall();
 		game.score.draw();
 		coin.coinanimate(); //in future coins will be animated here, before the player
+		obs.drawWall();
 		game.player.movement();
 		game.player.playeranimate();
 	}
@@ -466,4 +517,6 @@ var backgroundmid = new game.Background(2);
 var backgroundback = new game.Background(3);
 	backgroundback.img = game.imgbackgroundbase;
 var coin = new game.Coin(200, 100); //placeholder, remove once coin spawning has been implemented
+var obs = new game.Obstacle(canvas.height-20);
+obs.spawnWall();
 window.onload = game.animate();
