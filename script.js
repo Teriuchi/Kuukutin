@@ -32,8 +32,8 @@ var Game = function(){
 /////////////////////
 	this.player = {
 		x: 100,
-		y: canvas.height - 60,
-		y_max: canvas.height - 60,
+		y: canvas.height - 80,
+		y_max: canvas.height - 80,
 		w: 52,
 	   	h: 60,
 		runw: 56,
@@ -270,7 +270,6 @@ var Game = function(){
 		}
 		else{
 			game.floorTick += 5;
-			console.log(game.floorTick);
 		}
 	}
 /////////////////////
@@ -388,18 +387,18 @@ var Game = function(){
 			}
 		}
 		if (this.falling === true){
-			if (this.y+this.h >= canvas.height && this.gravityReversed === false){
+			if (this.y+this.h >= canvas.height-20 && this.gravityReversed === false){
 				this.onground = true;
-				this.y = canvas.height-this.h;
+				this.y = canvas.height-this.h-20;
 				this.jumptimetotal = 0;
 				this.falling = false;
 				this.jumping = false;
 				this.movestat = 1;
 				this.gravityspamblock = false;
 			}
-			if (this.y <= 0 && this.gravityReversed === true){
+			if (this.y <= 20 && this.gravityReversed === true){
 				this.onground = true;
-				this.y = 0;
+				this.y = 20;
 				this.jumptimetotal = 0;
 				this.falling = false;
 				this.jumping = false;
