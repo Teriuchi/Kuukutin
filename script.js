@@ -40,7 +40,7 @@ var Game = function(){
 		runh: 72,
 		diry: 1,
 		dirx: 0,
-		speed: 7,
+		speed: 4.8,
 		jumpspeed: 18,
 		movestat: 1,
 		tick: 0,	//frame data starts from here
