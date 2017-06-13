@@ -25,7 +25,7 @@ var Game = function(){
 /////////////////////
 
 	this.floorTick = 0;
-	this.floorTickMax = 100;
+	this.floorTickMax = 95;
 
 /////////////////////
 //Player character
