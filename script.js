@@ -368,7 +368,7 @@ window.addEventListener("keydown", function (event) {
     return;
   }
 
-  switch (event.which) {
+  /*switch (event.which) {
     case 32: if (game.player.jumping === true && game.player.gravityspamblock === false){ //Spacebar
 				game.player.gravityspamblock = true;
 			 if(game.player.gravityReversed){
@@ -394,7 +394,24 @@ window.addEventListener("keydown", function (event) {
 		break;
     default:
       return;
-  }
+  }*/
+  
+	var controls = function() {
+		if(event.which === 32 && game.player.jumping === true && game.player.gravityspamblock === false){ //Spacebar
+		  	game.player.gravityspamblock = true;
+			if(game.player.gravityReversed){
+				game.player.gravityReversed = false;
+			}else{
+				game.player.gravityReversed = true;
+				game.player.gravitynegative = game.player.gravitynegative*-1;
+			}
+			break;
+		}
+		if(event.which === 37 && game.player.dirx = -1){
+			break;
+		
+		}
+	}
   event.preventDefault();
 }, true);
 
