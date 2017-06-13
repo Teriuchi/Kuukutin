@@ -378,7 +378,7 @@ var Game = function(){
 				this.jumptimetotal += 0.4;
 				this.y -= (this.jumpspeed - this.jumptimetotal)*this.gravitynegative;
 				if (this.jumptimetotal === this.jumpspeed){
-					this. falling = true;
+					this.falling = true;
 				}
 			}
 			else{
@@ -387,9 +387,9 @@ var Game = function(){
 			}
 		}
 		if (this.falling === true){
-			if (this.y+this.h >= canvas.height-20 && this.gravityReversed === false){
+			if (this.y+this.h >= canvas.height - 20 && this.gravityReversed === false){
 				this.onground = true;
-				this.y = canvas.height-this.h-20;
+				this.y = canvas.height-this.h - 20;
 				this.jumptimetotal = 0;
 				this.falling = false;
 				this.jumping = false;
@@ -416,8 +416,8 @@ window.addEventListener("keydown", function (event) {
     return;
   }
 
-  /*switch (event.which) {
-    case 32: if (game.player.jumping === true && game.player.gravityspamblock === false){ //Spacebar
+  switch (event.which) {
+    case 90: if (game.player.jumping === true && game.player.gravityspamblock === false){ //Spacebar
 				game.player.gravityspamblock = true;
 			 if(game.player.gravityReversed){
 				game.player.gravityReversed = false;
@@ -430,35 +430,18 @@ window.addEventListener("keydown", function (event) {
 			 break;
     case 37: game.player.dirx = -1; //Left Arrow
 			 break;
-    case 38: if(game.player.onground){
+    case 38: if(game.player.onground){ //Up Arrow
 				game.player.onground = false;
 				game.player.jumping = true;
 			 }
 			 break;
     case 39: game.player.dirx = 1; // Right Arrow
 		break;
-    case 40: //Up Arrow
+    case 40: 
 		break;
     default:
       return;
-  }*/
-  
-	var controls = function() {
-		if(event.which === 32 && game.player.jumping === true && game.player.gravityspamblock === false){ //Spacebar
-		  	game.player.gravityspamblock = true;
-			if(game.player.gravityReversed){
-				game.player.gravityReversed = false;
-			}else{
-				game.player.gravityReversed = true;
-				game.player.gravitynegative = game.player.gravitynegative*-1;
-			}
-			break;
-		}
-		if(event.which === 37 && game.player.dirx = -1){
-			break;
-		
-		}
-	}
+  }
   event.preventDefault();
 }, true);
 
