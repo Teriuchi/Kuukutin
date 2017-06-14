@@ -278,6 +278,7 @@ var Game = function(){
 /////////////////////
 //Coins
 /////////////////////	
+	this.coins = [];
 	this.imgcoin = new Image();
 	this.imgcoin.src = "sprites/coin/full_coins.png";
 	this.Coin = function(coinx, coiny){
@@ -285,14 +286,14 @@ var Game = function(){
 		this.y = coiny;
 		this.w = 22.5;
 		this.h = 24;
-		this.points;
+		this.points = 10;
 		this.tick = 0;
 		this.tickmax = 5;
 		this.curframe = 0;
 		this.maxframe = 8;
-		this.img = game.imgcoin;
-		
-		this.coinanimate = function(){
+		this.img = game.imgcoin;	
+	}
+	this.Coin.prototype.coinanimate = function(){
 			ctx.drawImage(this.img,(this.curframe*16),0,15,16,this.x,this.y,this.w,this.h);
 			if (this.tick <= this.tickmax){
 				this.tick++;
@@ -304,7 +305,18 @@ var Game = function(){
 			if (this.curframe >= this.maxframe){
 				this.curframe = 0;
 			}
-		}
+			this.x -=5;
+		};
+	this.Coin.prototype.collect = function(deleteThis){
+			if (this.x < game.player.w+game.player.x && this.x > game.player.x && this.y < game.player.y+game.player.h && this.y > game.player.y){
+				game.score.score += this.points;
+				game.coins.splice(deleteThis, 1)
+			}
+		};
+	this.spawncoin = function(){
+		let newCoin = new game.Coin(canvas.width, Math.random()*canvas.height);
+		game.coins.push(newCoin);
+		console.log(game.coins);
 	}
 /////////////////////
 //Background
@@ -440,7 +452,7 @@ window.addEventListener("keydown", function (event) {
 			 break;
     case 39: game.player.dirx = 1; // Right Arrow
 		break;
-    case 40: 
+    case 40: game.spawncoin();
 		break;
     default:
       return;
@@ -484,8 +496,11 @@ window.addEventListener("keyup", function (event) {
 		backgroundback.draw();
 		game.floors();
 		obs.moveWall();
+		game.coins.forEach(function(item) {
+			item.coinanimate();
+			item.collect(item);
+		});
 		game.score.draw();
-		coin.coinanimate(); //in future coins will be animated here, before the player
 		obs.drawWall();
 		game.player.movement();
 		game.player.playeranimate();
@@ -501,7 +516,6 @@ var backgroundmid = new game.Background(2);
 	backgroundmid.img = game.imgbackgroundmiddle;
 var backgroundback = new game.Background(3);
 	backgroundback.img = game.imgbackgroundbase;
-var coin = new game.Coin(200, 100); //placeholder, remove once coin spawning has been implemented
 var obs = new game.Obstacle(canvas.height-20);
 obs.spawnWall();
 window.onload = game.animate();
