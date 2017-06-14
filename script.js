@@ -202,7 +202,7 @@ var Game = function(){
 					}
 					if (this.deathframe >= this.deathframemax){
 						this.deathframe = 0;
-						this.movestat = -1;
+						location.reload();
 					}
 					break;
 			case 6: //attack animation
@@ -391,58 +391,63 @@ var Game = function(){
 //Movement
 ////////////////////////
 	this.player.movement = function(){
-		switch(this.dirx){
-			case -1:this.movestat = 0; 
-				if(this.x <= 4){
-						this.x = 4;
-					 }
-						this.x -= this.speed;
-						break;
-			case 0: this.movestat = 1;
-				break;
-			case 1: this.movestat = 1;
-				if(this.x >= canvas.width - this.runw){
-						this.x = canvas.width - this.runw;
-					}
-						this.x += this.speed;
-						break;
-			default:
+		if (game.player.movestat === 5){
+			
 		}
-		if (this.onground === false){
-			this.movestat = 3;
-			if (this.falling === false){
-				this.jumptimetotal += 0.4;
-				this.y -= (this.jumpspeed - this.jumptimetotal)*this.gravitynegative;
-				if (this.jumptimetotal === this.jumpspeed){
-					this.falling = true;
+		else{
+			switch(this.dirx){
+				case -1:this.movestat = 0; 
+					if(this.x <= 4){
+							this.x = 4;
+						 }
+							this.x -= this.speed;
+							break;
+				case 0: this.movestat = 1;
+					break;
+				case 1: this.movestat = 1;
+					if(this.x >= canvas.width - this.runw){
+							this.x = canvas.width - this.runw;
+						}
+							this.x += this.speed;
+							break;
+				default:
+			}
+			if (this.onground === false){
+				this.movestat = 3;
+				if (this.falling === false){
+					this.jumptimetotal += 0.4;
+					this.y -= (this.jumpspeed - this.jumptimetotal)*this.gravitynegative;
+					if (this.jumptimetotal === this.jumpspeed){
+						this.falling = true;
+					}
+				}
+				else{
+					this.jumptimetotal += 0.8;
+					this.y += (this.jumptimetotal - this.jumpspeed)*this.gravitynegative;
 				}
 			}
-			else{
-				this.jumptimetotal += 0.8;
-				this.y += (this.jumptimetotal - this.jumpspeed)*this.gravitynegative;
+			if (this.falling === true){
+				if (this.y+this.h >= canvas.height - 20 && this.gravityReversed === false){
+					this.onground = true;
+					this.y = canvas.height-this.h - 20;
+					this.jumptimetotal = 0;
+					this.falling = false;
+					this.jumping = false;
+					this.movestat = 1;
+					this.gravityspamblock = false;
+				}
+				if (this.y <= 20 && this.gravityReversed === true){
+					this.onground = true;
+					this.y = 20;
+					this.jumptimetotal = 0;
+					this.falling = false;
+					this.jumping = false;
+					this.movestat = 1;
+					this.gravityspamblock = false;
+				}
 			}
 		}
-		if (this.falling === true){
-			if (this.y+this.h >= canvas.height - 20 && this.gravityReversed === false){
-				this.onground = true;
-				this.y = canvas.height-this.h - 20;
-				this.jumptimetotal = 0;
-				this.falling = false;
-				this.jumping = false;
-				this.movestat = 1;
-				this.gravityspamblock = false;
-			}
-			if (this.y <= 20 && this.gravityReversed === true){
-				this.onground = true;
-				this.y = 20;
-				this.jumptimetotal = 0;
-				this.falling = false;
-				this.jumping = false;
-				this.movestat = 1;
-				this.gravityspamblock = false;
-			}
-		}
-	}	
+	}
 /////////////////////
 //Controls
 /////////////////////
@@ -498,7 +503,7 @@ window.addEventListener("keyup", function (event) {
     case 39: if (game.player.dirx === 1) 
 					game.player.dirx = 0;
 		break;
-    case 40:
+    case 75: game.player.movestat = 5;
 		break;
     default:
       return;
