@@ -331,7 +331,7 @@ var Game = function(){
 	this.spawncoin = function(){
 		if(game.coinTick >= game.coinTickMax){
 			let canvasheight = Math.ceil(canvas.height/7)
-			let newCoin = new game.Coin(canvas.width, Math.ceil(Math.random()*6)*canvasheight);
+			let newCoin = new game.Coin(canvas.width, Math.ceil(Math.random()*6)*canvasheight - 12);
 			game.coins.push(newCoin);
 			game.coinTick = 0;
 		}
