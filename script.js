@@ -319,6 +319,14 @@ var Game = function(){
 					}
 				}
 			}
+			if (this.x+this.w < 0){
+				for(var i = 0; i < game.coins.length; i++) {
+					if (game.coins[i].x === this.x){
+						game.coins.splice(i,1)
+						break;
+					}
+				}
+			}
 		};
 	this.spawncoin = function(){
 		if(game.coinTick >= game.coinTickMax){
