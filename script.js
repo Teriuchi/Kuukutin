@@ -6,6 +6,7 @@ var canvas 	= document.getElementById("canvas"),
        ctx 	= canvas.getContext("2d");
 var	bg 	= document.createElement('canvas'),
 	bgtx	= bg.getContext('2d');   
+document.body.appendChild(bg);
 canvas.style.position 		= "absolute";
 canvas.style.zIndex   		= 1;
 canvas.width 				= window.innerWidth;
@@ -15,7 +16,19 @@ bg.style.zIndex   			= -1;
 bg.style.backgroundColor 	= "#758a88";
 bg.width					= window.innerWidth;
 bg.height					= window.innerHeight;
-document.body.appendChild(bg);
+var resize = function(){
+	window.onresize = function(){
+		canvas.style.position 		= "absolute";
+		canvas.style.zIndex   		= 1;
+		canvas.width 				= window.innerWidth;
+		canvas.height 				= window.innerHeight;
+		bg.style.position 			= "absolute";
+		bg.style.zIndex   			= -1;
+		bg.style.backgroundColor 	= "#758a88";
+		bg.width					= window.innerWidth;
+		bg.height					= window.innerHeight;
+	};
+}
 /////////////////////
 //The game itself
 /////////////////////
@@ -515,6 +528,7 @@ window.addEventListener("keyup", function (event) {
 ////////////////////////
 	this.animate = function(){
 		requestAnimationFrame(game.animate);
+		resize();
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		bgtx.clearRect(0,0,canvas.width,canvas.height);
 		backgroundbase.draw();
