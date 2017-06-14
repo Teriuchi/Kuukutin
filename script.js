@@ -26,6 +26,8 @@ var Game = function(){
 
 	this.floorTick = 0;
 	this.floorTickMax = 95;
+	this.coinTick = 0;
+	this.coinTickMax = 100;
 
 /////////////////////
 //Player character
@@ -40,7 +42,7 @@ var Game = function(){
 		runh: 72,
 		diry: 1,
 		dirx: 0,
-		speed: 4.8,
+		speed: 5,
 		jumpspeed: 18,
 		movestat: 1,
 		tick: 0,	//frame data starts from here
@@ -305,18 +307,29 @@ var Game = function(){
 			if (this.curframe >= this.maxframe){
 				this.curframe = 0;
 			}
-			this.x -=5;
+			this.x -=2.5;
 		};
-	this.Coin.prototype.collect = function(deleteThis){
-			if (this.x < game.player.w+game.player.x && this.x > game.player.x && this.y < game.player.y+game.player.h && this.y > game.player.y){
+	this.Coin.prototype.collect = function(){
+			if (this.x+(this.w/2) < game.player.w+game.player.x && this.x+(this.w/2) > game.player.x && this.y+(this.h/2) < game.player.y+game.player.h && this.y+(this.h/2) > game.player.y){
 				game.score.score += this.points;
-				game.coins.splice(deleteThis, 1)
+				for(var i = 0; i < game.coins.length; i++) {
+					if (game.coins[i].x === this.x){
+						game.coins.splice(i,1)
+						break;
+					}
+				}
 			}
 		};
 	this.spawncoin = function(){
-		let newCoin = new game.Coin(canvas.width, Math.random()*canvas.height);
-		game.coins.push(newCoin);
-		console.log(game.coins);
+		if(game.coinTick >= game.coinTickMax){
+			let canvasheight = Math.ceil(canvas.height/7)
+			let newCoin = new game.Coin(canvas.width, Math.ceil(Math.random()*6)*canvasheight);
+			game.coins.push(newCoin);
+			game.coinTick = 0;
+		}
+		else{
+			game.coinTick++;
+		}
 	}
 /////////////////////
 //Background
@@ -496,9 +509,10 @@ window.addEventListener("keyup", function (event) {
 		backgroundback.draw();
 		game.floors();
 		obs.moveWall();
+		game.spawncoin();
 		game.coins.forEach(function(item) {
 			item.coinanimate();
-			item.collect(item);
+			item.collect();
 		});
 		game.score.draw();
 		obs.drawWall();
