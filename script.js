@@ -239,18 +239,19 @@ var Game = function(){
 	this.Obstacle = function(oy){
 		this.x = canvas.width + 100;
 		this.y = oy;
-		this.w;
+		this.w = 100;
 		this.h;
 		this.img = game.imgobs;
 		
 			
 	}
 	this.Obstacle.prototype.drawWall = function(){
-		ctx.drawImage(this.img, 4, 0, 100, this.h*50, this.x, this.y, 100, this.h*50);
+		ctx.drawImage(this.img, 4, 0, 100, this.h, this.x, this.y, 100, this.h);
 	};
 	this.Obstacle.prototype.spawnWall = function(){
 		this.h = Math.ceil((Math.random()*4));
-		this.y -= this.h*50;
+		this.h = this.h*50;
+		this.y -= this.h;
 		this.x -= game.floorTick +15;
 	};
 	this.Obstacle.prototype.moveWall = function(){
@@ -272,7 +273,6 @@ var Game = function(){
 		}
 		else{
 			game.floorTick += 5;
-			console.log(game.floorTick);
 		}
 	}
 /////////////////////
