@@ -27,6 +27,9 @@ var resize = function(){
 		bg.style.backgroundColor 	= "#758a88";
 		bg.width					= window.innerWidth;
 		bg.height					= window.innerHeight;
+		game.player.y				= canvas.height - 80;
+		if(game.player.x > canvas.width)
+			game.player.x = canvas.width - game.player.w;
 	};
 }
 /////////////////////
