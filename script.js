@@ -532,8 +532,9 @@ window.addEventListener("keydown", function (event) {
   }
 
   switch (event.which) {
-    case 90: if (game.player.jumping === true && game.player.gravityspamblock === false){ //Spacebar
+     case 90: if (game.player.jumping === true && game.player.gravityspamblock === false){ //Z key
 				game.player.gravityspamblock = true;
+				game.player.jumptimetotal = 0;
 			 if(game.player.gravityReversed){
 				game.player.gravityReversed = false;
 			 }
