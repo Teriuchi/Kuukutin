@@ -604,6 +604,7 @@ window.addEventListener("keyup", function (event) {
 		game.score.draw();
 		if(game.score.addingTime)
 			game.score.increase();
+		game.score.moarPoints();
 		obs.drawWall();
 		game.player.movement();
 		game.player.playeranimate();
