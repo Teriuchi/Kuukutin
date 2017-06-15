@@ -43,7 +43,7 @@ var Game = function(){
 	this.floorTick = 0;
 	this.floorTickMax = 95;
 	this.coinTick = 0;
-	this.coinTickMax = 100;
+	this.coinTickMax = 200;
 
 /////////////////////
 //Player character
