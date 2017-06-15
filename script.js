@@ -306,10 +306,16 @@ var Game = function(){
 		this.tickmax = 5;
 		this.curframe = 0;
 		this.maxframe = 8;
+		this.disappear = 0;
+		this.disappearMax = 30;
+		this.transparency = 1;
+		this.timeToDie = false;
 		this.img = game.imgcoin;	
 	}
 	this.Coin.prototype.coinanimate = function(){
+			ctx.globalAlpha = this.transparency;
 			ctx.drawImage(this.img,(this.curframe*16),0,15,16,this.x,this.y,this.w,this.h);
+			ctx.globalAlpha = 1;
 			if (this.tick <= this.tickmax){
 				this.tick++;
 			}
@@ -325,12 +331,8 @@ var Game = function(){
 	this.Coin.prototype.collect = function(){
 			if (this.x+(this.w/2) < game.player.w+game.player.x && this.x+(this.w/2) > game.player.x && this.y+(this.h/2) < game.player.y+game.player.h && this.y+(this.h/2) > game.player.y){
 				game.score.score += this.points;
-				for(var i = 0; i < game.coins.length; i++) {
-					if (game.coins[i].x === this.x){
-						game.coins.splice(i,1)
-						break;
-					}
-				}
+				this.points = 0;
+				this.timeToDie = true;
 			}
 			if (this.x+this.w < 0){
 				for(var i = 0; i < game.coins.length; i++) {
@@ -340,13 +342,28 @@ var Game = function(){
 					}
 				}
 			}
+			if (this.timeToDie){
+				if (this.disappear >= this.disappearMax){
+					for(var i = 0; i < game.coins.length; i++) {
+						if (game.coins[i].x === this.x){
+							game.coins.splice(i,1)
+							break;
+						}
+					}
+				}
+				else{
+					this.y -= 1.5*game.player.gravitynegative;
+					this.disappear++;
+					this.transparency -= 0.03333333
+				}
+			}
 		};
 	this.spawncoin = function(){
 		if(game.coinTick >= game.coinTickMax){
 			let canvasheight = Math.ceil(canvas.height/7)
 			let newCoin = new game.Coin(canvas.width, Math.ceil(Math.random()*6)*canvasheight - 12);
 			game.coins.push(newCoin);
-			game.coinTick = 0;
+			game.coinTick = Math.random()*190;
 		}
 		else{
 			game.coinTick++;
