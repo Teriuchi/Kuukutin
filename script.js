@@ -333,12 +333,15 @@ var Game = function(){
 		};
 	this.Coin.prototype.collect = function(){
 			if (this.x+(this.w/2) < game.player.w+game.player.x && this.x+(this.w/2) > game.player.x && this.y+(this.h/2) < game.player.y+game.player.h && this.y+(this.h/2) > game.player.y){
-				game.score.score += this.points;
 				if (this.points === 10){
 					game.score.addingTime = true;
 					game.score.addTick = 0;
 					game.score.scoreAdd += 10;
 					game.score.scoreTrans = 1;
+					game.score.multiplier += 0.1;
+					game.score.multiplier = game.score.multiplier * 10;
+					game.score.multiplier = Math.floor(game.score.multiplier);
+					game.score.multiplier = game.score.multiplier/10;
 				}
 				this.points = 0;
 				this.timeToDie = true;
@@ -416,7 +419,9 @@ var Game = function(){
 		scoreTrans: 1,
 		addTick: 0,
 		addTickMax: 150,
-		addingTime: false
+		addingTime: false,
+		multiplier: 0.9,
+		scoreReserve: 0
 	};
 	
 	this.score.draw = function(){
@@ -432,21 +437,29 @@ var Game = function(){
 	}
 	this.score.increase = function(){
 		if (this.addTick >= this.addTickMax){
+			this.scoreReserve += Math.ceil(this.scoreAdd * this.multiplier);
 			this.addTick = 0;
 			this.addingTime = false;
 			this.scoreAdd = 0;
 			this.scoreTrans = 1;
+			this.multiplier = 0.9;
 		}
 		else{
 			this.addTick++;
 			ctx.fillStyle = this.color;
 			ctx.font = this.font;
 			ctx.globalAlpha = this.scoreTrans;
-			ctx.fillText("Score: "+this.score +" +"+this.scoreAdd,this.x,this.y);
+			ctx.fillText("Score: "+this.score +" +"+this.scoreAdd +" x" + this.multiplier,this.x,this.y);
 			ctx.globalAlpha = 1;
 			this.scoreTrans -= 0.0066666667;
 		}
-	}	
+	}
+	this.score.moarPoints = function(){
+		if (this.scoreReserve > 0){
+			this.score++;
+			this.scoreReserve--;
+		}
+	}
 		
 ////////////////////////
 //Movement
