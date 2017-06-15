@@ -334,6 +334,12 @@ var Game = function(){
 	this.Coin.prototype.collect = function(){
 			if (this.x+(this.w/2) < game.player.w+game.player.x && this.x+(this.w/2) > game.player.x && this.y+(this.h/2) < game.player.y+game.player.h && this.y+(this.h/2) > game.player.y){
 				game.score.score += this.points;
+				if (this.points === 10){
+					game.score.addingTime = true;
+					game.score.addTick = 0;
+					game.score.scoreAdd += 10;
+					game.score.scoreTrans = 1;
+				}
 				this.points = 0;
 				this.timeToDie = true;
 			}
@@ -405,7 +411,12 @@ var Game = function(){
 		y: 45,
 		font: "30px Courier New",
 		color: "white",
-		score: 0
+		score: 0,
+		scoreAdd: 0,
+		scoreTrans: 1,
+		addTick: 0,
+		addTickMax: 150,
+		addingTime: false
 	};
 	
 	this.score.draw = function(){
@@ -417,6 +428,23 @@ var Game = function(){
 		}else{
 			game.score.score = game.score.score + 1;
 			game.score.scoreTick = 0;
+		}
+	}
+	this.score.increase = function(){
+		if (this.addTick >= this.addTickMax){
+			this.addTick = 0;
+			this.addingTime = false;
+			this.scoreAdd = 0;
+			this.scoreTrans = 1;
+		}
+		else{
+			this.addTick++;
+			ctx.fillStyle = this.color;
+			ctx.font = this.font;
+			ctx.globalAlpha = this.scoreTrans;
+			ctx.fillText("Score: "+this.score +" +"+this.scoreAdd,this.x,this.y);
+			ctx.globalAlpha = 1;
+			this.scoreTrans -= 0.0066666667;
 		}
 	}	
 		
@@ -548,7 +576,6 @@ window.addEventListener("keyup", function (event) {
 ////////////////////////
 	this.animate = function(){
 		requestAnimationFrame(game.animate);
-		resize();
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		bgtx.clearRect(0,0,canvas.width,canvas.height);
 		backgroundbase.draw();
@@ -562,6 +589,8 @@ window.addEventListener("keyup", function (event) {
 			item.collect();
 		});
 		game.score.draw();
+		if(game.score.addingTime)
+			game.score.increase();
 		obs.drawWall();
 		game.player.movement();
 		game.player.playeranimate();
