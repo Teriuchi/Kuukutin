@@ -12,7 +12,7 @@ var resize = function(){
 	window.onresize = function(){
 		canvas.style.position 		= "absolute";
 		canvas.style.zIndex   		= 1;
-		canvas.width 				= window.innerWidth;
+		canvas.width 				= 1024;
 		canvas.height 				= window.innerHeight;
 		game.player.y				= canvas.height - 80;
 		if(game.player.x > canvas.width)
