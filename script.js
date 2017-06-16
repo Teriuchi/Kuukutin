@@ -4,29 +4,16 @@
 /////////////////////
 var canvas 	= document.getElementById("canvas"),
        ctx 	= canvas.getContext("2d");
-var	bg 	= document.createElement('canvas'),
-	bgtx	= bg.getContext('2d');   
-document.body.appendChild(bg);
 canvas.style.position 		= "absolute";
 canvas.style.zIndex   		= 1;
-canvas.width 				= window.innerWidth;
+canvas.width 				= 1024;
 canvas.height 				= window.innerHeight;
-bg.style.position 			= "absolute";
-bg.style.zIndex   			= -1;
-bg.style.backgroundColor 	= "#758a88";
-bg.width					= window.innerWidth;
-bg.height					= window.innerHeight;
 var resize = function(){
 	window.onresize = function(){
 		canvas.style.position 		= "absolute";
 		canvas.style.zIndex   		= 1;
 		canvas.width 				= window.innerWidth;
 		canvas.height 				= window.innerHeight;
-		bg.style.position 			= "absolute";
-		bg.style.zIndex   			= -1;
-		bg.style.backgroundColor 	= "#758a88";
-		bg.width					= window.innerWidth;
-		bg.height					= window.innerHeight;
 		game.player.y				= canvas.height - 80;
 		if(game.player.x > canvas.width)
 			game.player.x = canvas.width - game.player.w;
@@ -397,8 +384,8 @@ var Game = function(){
 		this.img;
 		this.draw = function(){
 			this.x -= this.speed;
-			bgtx.drawImage(this.img, 0, 0, 2000, 2000, this.x, this.y, bg.width, bg.height);
-			bgtx.drawImage(this.img, 0, 0, 2000, 2000, this.x + canvas.width, this.y, bg.width, bg.height);
+			ctx.drawImage(this.img, 0, 0, 1024, 1024, this.x, this.y, 1024, canvas.height);
+			ctx.drawImage(this.img, 0, 0, 1024, 1024, this.x + 1024, this.y, 1024, canvas.height);
 			if (this.x <= 0 - canvas.width){
 				this.x = 0;
 			}
@@ -590,8 +577,6 @@ window.addEventListener("keyup", function (event) {
 ////////////////////////
 	this.animate = function(){
 		requestAnimationFrame(game.animate);
-		ctx.clearRect(0,0,canvas.width,canvas.height);
-		bgtx.clearRect(0,0,canvas.width,canvas.height);
 		backgroundbase.draw();
 		backgroundmid.draw();
 		backgroundback.draw();
