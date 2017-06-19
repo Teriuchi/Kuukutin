@@ -7,19 +7,26 @@
 	</head>
 	<style>
 		* {
-		margin: 0;
-		cursor: none;
+			margin: 			0;
+			background-color:	#2e3635;
 		}
 		html body {
-			width:	100vw;
-			height:	100vh;
-		}
-		canvas {
+			width:				100vw;
+			height:				100vh;
+		}	
+		canvas {	
+			cursor: 			none;
 			position:			absolute;
+			top:				0;
+			bottom: 			0;
+			left: 				0;
+			right: 				0;
+			margin:				auto;
 		}
 	</style>
 	<body id='main'>
-		<canvas id='canvas'></canvas>
+		<canvas id='canvas'>Your browset doesn't support canvas</canvas>
+			<canvas id='bgcanvas'></canvas>
 	</body>
 </html>
 <script src='script.js'></script>
