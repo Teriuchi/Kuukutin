@@ -31,6 +31,8 @@ var Game = function(){
 	this.floorTickMax = 95;
 	this.coinTick = 0;
 	this.coinTickMax = 200;
+	this.wallTick = 0;
+	this.wallTickMax = 199;
 
 /////////////////////
 //Player character
@@ -238,30 +240,45 @@ var Game = function(){
 /////////////////////
 //Obstacles
 /////////////////////
-	var obstacles = [];
+	this.obstacles = [];
 	this.imgobs = new Image();
 	this.imgobs.src = "sprites/obstacles/brick_2.png";
-	this.Obstacle = function(oy){
-		this.x = canvas.width + 100;
+	this.Obstacle = function(oy, oh){
+		this.x = canvas.width + 85;
 		this.y = oy;
 		this.w = 100;
-		this.h;
+		this.h = oh;
 		this.img = game.imgobs;
 		
 			
 	}
-	this.Obstacle.prototype.drawWall = function(){
-		ctx.drawImage(this.img, 4, 0, 100, this.h, this.x, this.y, 100, this.h);
-	};
-	this.Obstacle.prototype.spawnWall = function(){
-		this.h = Math.ceil((Math.random()*4));
-		this.h = this.h*50;
-		this.y -= this.h;
-		this.x -= game.floorTick +15;
+	this.Obstacle.prototype.collision = function(){
+		if (this.x < -1300){
+			for(var i = 0; i < game.obstacles.length; i++) {
+				if (game.obstacles[i].x === this.x && game.obstacles[i].y === this.y){
+					game.obstacles.splice(i,1);
+					break;
+				}
+			}
+		}
 	};
 	this.Obstacle.prototype.moveWall = function(){
 		this.x -= 5;
+		ctx.drawImage(this.img, 4, 0, 100, this.h, this.x, this.y, 100, this.h);
 	};
+	this.spawnWall = function(){
+		if(game.wallTick >= game.wallTickMax){
+			let h = Math.ceil((Math.random()*4));
+			h = h*50;
+			let newObs = new game.Obstacle(canvas.height-20-h, h);
+			game.obstacles.push(newObs);
+			game.wallTick = 0;
+			console.log("spawned")
+		}
+		else{
+			game.wallTick++;
+		}
+	}
 	
 	this.floors = function(){
 		let canvasBlocks = Math.ceil(canvas.width / 100) +1;
@@ -581,7 +598,11 @@ window.addEventListener("keyup", function (event) {
 		backgroundmid.draw();
 		backgroundback.draw();
 		game.floors();
-		obs.moveWall();
+		game.spawnWall();
+		game.obstacles.forEach(function(item) {
+			item.moveWall();
+			item.collision();
+		});
 		game.spawncoin();
 		game.coins.forEach(function(item) {
 			item.coinanimate();
@@ -591,7 +612,6 @@ window.addEventListener("keyup", function (event) {
 		if(game.score.addingTime)
 			game.score.increase();
 		game.score.moarPoints();
-		obs.drawWall();
 		game.player.movement();
 		game.player.playeranimate();
 	}
@@ -606,6 +626,4 @@ var backgroundmid = new game.Background(2);
 	backgroundmid.img = game.imgbackgroundmiddle;
 var backgroundback = new game.Background(3);
 	backgroundback.img = game.imgbackgroundbase;
-var obs = new game.Obstacle(canvas.height-20);
-obs.spawnWall();
 window.onload = game.animate();
