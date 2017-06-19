@@ -297,6 +297,23 @@ var Game = function(){
 			game.floorTick += 5;
 		}
 	}
+////////////////////////
+//Collision
+////////////////////////
+	this.Obstacle.prototype.collision = function(){
+		if (game.player.x+game.player.w >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w && game.player.y <= this.y +this.h)
+			switch(game.player.dirx){
+				case -1:
+							break;
+				case 0: game.player.x -= game.player.speed;
+						game.player.movestat = 0;
+							break;
+				case 1: game.player.x -= game.player.speed*2;
+						game.player.movestat = 0;
+							break;
+				default:
+			}
+	};
 /////////////////////
 //Coins
 /////////////////////	
@@ -598,6 +615,7 @@ window.addEventListener("keyup", function (event) {
 		backgroundmid.draw();
 		backgroundback.draw();
 		game.floors();
+		game.player.movement();
 		game.spawnWall();
 		game.obstacles.forEach(function(item) {
 			item.moveWall();
@@ -612,7 +630,6 @@ window.addEventListener("keyup", function (event) {
 		if(game.score.addingTime)
 			game.score.increase();
 		game.score.moarPoints();
-		game.player.movement();
 		game.player.playeranimate();
 	}
 }
