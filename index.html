@@ -3,28 +3,20 @@
 	<head>
 		<meta charset='utf-8'>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+		<link rel="stylesheet" type="text/css" href="style.css">
 		<title>Kuukutin</title>
 	</head>
-	<style>
-		* {
-			margin: 			0;
-			background-color:	#2e3635;
-		}
-		html body {
-			width:				100vw;
-			height:				100vh;
-		}	
-		canvas {	
-			cursor: 			none;
-			position:			absolute;
-			top:				0;
-			bottom: 			0;
-			left: 				0;
-			right: 				0;
-			margin:				auto;
-		}
-	</style>
-	<body id='main'>
+	<body>
+	<div class="wrapper">
+    <div id="menu" class="main">
+      <div id="main">
+        <h1>Kuukutin</h1>
+        <ul>
+          <li><a href="#" class="button play">Start Game</a></li>
+          <li><a href="#" class="button credits">Credits</a></li>
+        </ul>
+      </div>
+    </div>
 		<canvas id='canvas'>Your browser doesn't support canvas</canvas>
 			<canvas id='bgcanvas'></canvas>
 	</body>
