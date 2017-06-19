@@ -15,3 +15,7 @@ Credits:
 - Obstacle design by devouliin.com
 
 	opengameart.org/content/game-asset-brick-game-obstacles
+
+- Menu images by Tyler Seitz
+
+	https://code.tutsplus.com/tutorials/animating-game-menus-and-screen-transitions-in-html5-a-guide-for-flash-developers--active-11183
