@@ -70,6 +70,7 @@ var Game = function(){
 		falling: false,
 		jumptimetotal: 0,
 		jumping: false,
+		jumpCollision: false,
 		onground: true,
 		gravitytick: 0,
 		gravitynegative: 1,
@@ -301,7 +302,7 @@ var Game = function(){
 //Collision
 ////////////////////////
 	this.Obstacle.prototype.collision = function(){
-		if (game.player.x+game.player.w >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w && game.player.y <= this.y +this.h)
+		if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y+5 && game.player.x <= this.x+this.w && game.player.y <= this.y +this.h-5)
 			switch(game.player.dirx){
 				case -1:
 							break;
@@ -313,7 +314,43 @@ var Game = function(){
 							break;
 				default:
 			}
+		//This still needs some work to account for multiple blocks
+		if (game.player.falling === true && game.player.jumptimetotal >= 18){
+			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w && game.player.y <= this.y +this.h && game.player.gravityReversed === false){
+				game.player.onground = true;
+				game.player.y = this.y-60;
+				game.player.jumptimetotal = 0;
+				game.player.falling = false;
+				game.player.jumping = false;
+				game.player.movestat = 1;
+				game.player.gravityspamblock = false;
+				game.player.diry = 0;
+				game.player.jumpCollision = true;
+			}
+			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w && game.player.y <= this.y +this.h && game.player.gravityReversed === true){
+				game.player.onground = true;
+				game.player.y = this.y+this.h;
+				game.player.jumptimetotal = 0;
+				game.player.falling = false;
+				game.player.jumping = false;
+				game.player.movestat = 1;
+				game.player.gravityspamblock = false;
+				game.player.diry = 0;
+				game.player.jumpCollision = true;
+			}
+		}
 	};
+	
+	this.Obstacle.prototype.collisionReset = function(){
+		if(game.player.jumpCollision){
+			if (!(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w && game.player.y <= this.y +this.h)){
+				game.player.onground = false;
+				game.player.falling = true;
+				game.player.jumptimetotal = 18;
+				game.player.jumpCollision = false;
+			}
+		}
+	}
 /////////////////////
 //Coins
 /////////////////////	
@@ -511,12 +548,14 @@ var Game = function(){
 				this.movestat = 3;
 				if (this.falling === false){
 					this.jumptimetotal += 0.4;
+					this.diry = -1 * this.gravitynegative;
 					this.y -= (this.jumpspeed - this.jumptimetotal)*this.gravitynegative;
 					if (this.jumptimetotal === this.jumpspeed){
 						this.falling = true;
 					}
 				}
 				else{
+					this.diry = 1 * this.gravitynegative;
 					this.jumptimetotal += 0.8;
 					this.y += (this.jumptimetotal - this.jumpspeed)*this.gravitynegative;
 				}
@@ -530,6 +569,7 @@ var Game = function(){
 					this.jumping = false;
 					this.movestat = 1;
 					this.gravityspamblock = false;
+					this.diry = 0;
 				}
 				if (this.y <= 20 && this.gravityReversed === true){
 					this.onground = true;
@@ -539,6 +579,7 @@ var Game = function(){
 					this.jumping = false;
 					this.movestat = 1;
 					this.gravityspamblock = false;
+					this.diry = 0;
 				}
 			}
 		}
@@ -568,6 +609,7 @@ window.addEventListener("keydown", function (event) {
     case 37: game.player.dirx = -1; //Left Arrow
 			 break;
     case 38: if(game.player.onground){ //Up Arrow
+				game.player.jumpCollision = false;
 				game.player.onground = false;
 				game.player.jumping = true;
 			 }
@@ -620,6 +662,7 @@ window.addEventListener("keyup", function (event) {
 		game.obstacles.forEach(function(item) {
 			item.moveWall();
 			item.collision();
+			item.collisionReset();
 		});
 		game.spawncoin();
 		game.coins.forEach(function(item) {
