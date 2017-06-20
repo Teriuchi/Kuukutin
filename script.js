@@ -26,14 +26,23 @@ var Game = function(){
 /////////////////////
 //Game variables
 /////////////////////
-
 	this.floorTick = 0;
 	this.floorTickMax = 95;
 	this.coinTick = 0;
 	this.coinTickMax = 200;
 	this.wallTick = 0;
 	this.wallTickMax = 199;
-
+	this.transitioning = false;
+/////////////////////
+//Start Menu
+/////////////////////	
+	this.menuDraw = function() {
+		ctx.fillStyle = 'white';
+		ctx.font = '48px monospace';
+		ctx.fillText('Kuukutin', (canvas.width/2)-100, 450);
+		ctx.font = '24px monospace';
+		ctx.fillText('Press spacebar to begin', (canvas.width/2)-145, 550);		
+	}
 /////////////////////
 //Player character
 /////////////////////
@@ -274,7 +283,6 @@ var Game = function(){
 			let newObs = new game.Obstacle(canvas.height-20-h, h);
 			game.obstacles.push(newObs);
 			game.wallTick = 0;
-			console.log("spawned")
 		}
 		else{
 			game.wallTick++;
@@ -630,7 +638,7 @@ window.addEventListener("keyup", function (event) {
   }
 
   switch (event.which) {
-    case 32: 
+    case 32: game.transitioning = true;
 		break;
     case 37:if (game.player.dirx === -1) 
 					game.player.dirx = 0;
@@ -651,6 +659,7 @@ window.addEventListener("keyup", function (event) {
 ////////////////////////
 //Animation
 ////////////////////////
+
 	this.animate = function(){
 		requestAnimationFrame(game.animate);
 		backgroundbase.draw();
@@ -658,22 +667,26 @@ window.addEventListener("keyup", function (event) {
 		backgroundback.draw();
 		game.floors();
 		game.player.movement();
-		game.spawnWall();
-		game.obstacles.forEach(function(item) {
-			item.moveWall();
-			item.collision();
-			item.collisionReset();
-		});
-		game.spawncoin();
-		game.coins.forEach(function(item) {
-			item.coinanimate();
-			item.collect();
-		});
-		game.score.draw();
-		if(game.score.addingTime)
-			game.score.increase();
-		game.score.moarPoints();
 		game.player.playeranimate();
+		if(game.transitioning === true){
+			game.spawnWall();
+			game.obstacles.forEach(function(item) {
+				item.moveWall();
+				item.collision();
+				item.collisionReset();
+			});
+			game.spawncoin();
+			game.coins.forEach(function(item) {
+				item.coinanimate();
+				item.collect();
+			});
+			game.score.draw();
+			if(game.score.addingTime)
+				game.score.increase();
+			game.score.moarPoints();
+		} else {
+			game.menuDraw();
+		}
 	}
 }
 /////////////////////////
