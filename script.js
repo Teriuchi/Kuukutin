@@ -37,11 +37,15 @@ var Game = function(){
 //Start Menu
 /////////////////////	
 	this.menuDraw = function() {
-		ctx.fillStyle = 'white';
-		ctx.font = '48px monospace';
-		ctx.fillText('Kuukutin', (canvas.width/2)-100, 450);
-		ctx.font = '24px monospace';
-		ctx.fillText('Press spacebar to begin', (canvas.width/2)-145, 550);		
+		ctx.fillStyle = 'black';
+		ctx.font = '48px serif';
+		ctx.fillText('Kuukutin', (canvas.width/2)-100, 350);
+		ctx.font = '24px verdana';
+		ctx.fillText('Control Kuukutin by using arrow keys.', (canvas.width/2)-242, (canvas.height/2)-50);	
+		ctx.font = '24px';
+		ctx.fillText('While midair, you can switch your gravity by pressing Z-key.', (canvas.width/2)-350, (canvas.height/2));
+		ctx.font = '24px verdana';
+		ctx.fillText('Press spacebar to begin your journey', (canvas.width/2)-240, (canvas.height/2)+150);		
 	}
 /////////////////////
 //Player character
