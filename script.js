@@ -328,7 +328,7 @@ var Game = function(){
 			}
 		//This still needs some work to account for multiple blocks
 		if (game.player.falling === true && game.player.jumptimetotal >= 18){
-			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-3 && game.player.y <= this.y +this.h && game.player.gravityReversed === false){
+			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h && game.player.gravityReversed === false){
 				game.player.onground = true;
 				game.player.y = this.y-60;
 				game.player.jumptimetotal = 0;
@@ -339,7 +339,7 @@ var Game = function(){
 				game.player.diry = 0;
 				game.player.jumpCollision = true;
 			}
-			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-3 && game.player.y <= this.y +this.h && game.player.gravityReversed === true){
+			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h && game.player.gravityReversed === true){
 				game.player.onground = true;
 				game.player.y = this.y+this.h;
 				game.player.jumptimetotal = 0;
@@ -355,7 +355,7 @@ var Game = function(){
 	
 	this.Obstacle.prototype.collisionReset = function(){
 		if(game.player.jumpCollision){
-			if (!(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w && game.player.y <= this.y +this.h)){
+			if (!(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h)){
 				game.player.onground = false;
 				game.player.falling = true;
 				game.player.jumptimetotal = 18;
