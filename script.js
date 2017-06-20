@@ -31,7 +31,7 @@ var Game = function(){
 	this.coinTick = 0;
 	this.coinTickMax = 200;
 	this.wallTick = 0;
-	this.wallTickMax = 199;
+	this.wallTickMax = 79;
 	this.transitioning = false;
 /////////////////////
 //Start Menu
@@ -284,7 +284,13 @@ var Game = function(){
 		if(game.wallTick >= game.wallTickMax){
 			let h = Math.ceil((Math.random()*4));
 			h = h*50;
-			let newObs = new game.Obstacle(canvas.height-20-h, h);
+			let rng = Math.random();
+			if (rng > 0.5){
+				var newObs = new game.Obstacle(canvas.height-20-h, h);
+			}
+			else{
+				var newObs = new game.Obstacle(20, h);
+			}
 			game.obstacles.push(newObs);
 			game.wallTick = 0;
 		}
@@ -360,6 +366,10 @@ var Game = function(){
 				game.player.falling = true;
 				game.player.jumptimetotal = 18;
 				game.player.jumpCollision = false;
+			}
+			else{
+				game.player.jumpCollision = false;
+				game.player.onground = true;
 			}
 		}
 	}
@@ -678,16 +688,17 @@ window.addEventListener("keyup", function (event) {
 				item.moveWall();
 				item.collision();
 				item.collisionReset();
-			});
-			game.spawncoin();
-			game.coins.forEach(function(item) {
-				item.coinanimate();
-				item.collect();
-			});
-			game.score.draw();
-			if(game.score.addingTime)
-				game.score.increase();
-			game.score.moarPoints();
+		});
+		console.log(game.player.onground);
+		game.spawncoin();
+		game.coins.forEach(function(item) {
+			item.coinanimate();
+			item.collect();
+		});
+		game.score.draw();
+		if(game.score.addingTime)
+			game.score.increase();
+		game.score.moarPoints();
 		} else {
 			game.menuDraw();
 		}
