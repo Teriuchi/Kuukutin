@@ -284,7 +284,12 @@ var Game = function(){
 		if(game.wallTick >= game.wallTickMax){
 			let h = Math.ceil((Math.random()*4));
 			h = h*50;
-			let newObs = new game.Obstacle(canvas.height-20-h, h);
+			let rng = Math.random();
+			if(rng > 0.5){
+				var newObs = new game.Obstacle(canvas.height-20-h, h);
+			} else{
+				var newObs = new game.Obstacle(20, h);
+			}
 			game.obstacles.push(newObs);
 			game.wallTick = 0;
 		}
