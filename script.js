@@ -342,7 +342,7 @@ var Game = function(){
 				game.player.movestat = 1;
 				game.player.gravityspamblock = false;
 				game.player.diry = 0;
-				game.player.jumpCollision = true;
+				this.jumpCollision = true;
 			}
 			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h && game.player.gravityReversed === true){
 				game.player.onground = true;
@@ -353,18 +353,24 @@ var Game = function(){
 				game.player.movestat = 1;
 				game.player.gravityspamblock = false;
 				game.player.diry = 0;
-				game.player.jumpCollision = true;
+				this.jumpCollision = true;
 			}
 		}
 	};
 	
 	this.Obstacle.prototype.collisionReset = function(){
-		if(game.player.jumpCollision){
+		if(this.jumpCollision){
 			if (!(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h)){
 				game.player.onground = false;
-				game.player.falling = true;
-				game.player.jumptimetotal = 18;
-				game.player.jumpCollision = false;
+				if (game.player.jumping){
+					game.player.falling = false;
+					game.player.jumptimetotal = 0;
+				}
+				else{
+					game.player.falling = true;
+					game.player.jumptimetotal = 18;
+				}
+				this.jumpCollision = false;
 			}
 		}
 	}
