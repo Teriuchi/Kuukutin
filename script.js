@@ -83,7 +83,6 @@ var Game = function(){
 		falling: false,
 		jumptimetotal: 0,
 		jumping: false,
-		jumpCollision: false,
 		onground: true,
 		gravitytick: 0,
 		gravitynegative: 1,
@@ -263,8 +262,7 @@ var Game = function(){
 		this.w = 100;
 		this.h = oh;
 		this.img = game.imgobs;
-		
-			
+		this.jumpCollision = false;
 	}
 	this.Obstacle.prototype.collision = function(){
 		if (this.x < -1300){
