@@ -79,7 +79,6 @@ var Game = function(){
 		deathframe: 0,
 		deathframemax: 7,
 		deathtickmax: 10,
-		hurtframe: 1,
 		attackframe: 0,
 		attackframemax: 5,
 		attacktickmax: 3, //frame data ends here
@@ -320,11 +319,9 @@ var Game = function(){
 	this.floors = function(){
 		let canvasBlocks = Math.ceil(canvas.width / 100) +1;
 		for (let x=0;x<canvasBlocks;x++){
-			
 				ctx.drawImage(this.imgobs, 4, 0, 100, 50, (x*100) - game.floorTick, canvas.height-20, 100, 50);
 		}
 		for (let x=0;x<canvasBlocks;x++){
-			
 				ctx.drawImage(this.imgobs, 4, 0, 100, 50, (x*100) - game.floorTick, -30, 100, 50);
 		}
 		if(game.floorTick >= game.floorTickMax){
@@ -350,7 +347,6 @@ var Game = function(){
 							break;
 				default:
 			}
-		//This still needs some work to account for multiple blocks
 		if (game.player.falling === true && game.player.jumptimetotal >= 18){
 			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h){
 				game.player.onground = true;
