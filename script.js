@@ -33,6 +33,8 @@ var Game = function(){
 	this.wallTick = 0;
 	this.wallTickMax = 199;
 	this.transitioning = false;
+	this.platformMax = 1100;
+	this.platformTick = Math.random()*500+600;
 /////////////////////
 //Start Menu
 /////////////////////	
@@ -257,17 +259,17 @@ var Game = function(){
 	this.obstacles = [];
 	this.imgobs = new Image();
 	this.imgobs.src = "sprites/obstacles/brick_2.png";
-	this.Obstacle = function(oy, oh){
+	this.Obstacle = function(oy, oh, platform){
 		this.x = canvas.width + 85;
 		this.y = oy;
 		this.w = 100;
 		this.h = oh;
 		this.img = game.imgobs;
-		
-			
+		this.jumpCollision = false;
+		this.isPlatform = platform;
 	}
 	this.Obstacle.prototype.collision = function(){
-		if (this.x < -1300){
+		if (this.x < -1000){
 			for(var i = 0; i < game.obstacles.length; i++) {
 				if (game.obstacles[i].x === this.x && game.obstacles[i].y === this.y){
 					game.obstacles.splice(i,1);
@@ -278,17 +280,23 @@ var Game = function(){
 	};
 	this.Obstacle.prototype.moveWall = function(){
 		this.x -= 5;
-		ctx.drawImage(this.img, 4, 0, 100, this.h, this.x, this.y, 100, this.h);
+		if(this.isPlatform){
+			for(let i = 0; i<5; i++){
+				ctx.drawImage(this.img, 4, 0, 100, this.h, this.x+i*100, this.y, 100, this.h);
+			}
+		}
+		else
+			ctx.drawImage(this.img, 4, 0, 100, this.h, this.x, this.y, 100, this.h);
 	};
 	this.spawnWall = function(){
 		if(game.wallTick >= game.wallTickMax){
-			let h = Math.ceil((Math.random()*4));
+			let h = Math.ceil((4));
 			h = h*50;
 			let rng = Math.random();
 			if(rng > 0.5){
-				var newObs = new game.Obstacle(canvas.height-20-h, h);
+				var newObs = new game.Obstacle(canvas.height-20-h, h, false);
 			} else{
-				var newObs = new game.Obstacle(20, h);
+				var newObs = new game.Obstacle(20, h, false);
 			}
 			game.obstacles.push(newObs);
 			game.wallTick = 0;
@@ -296,6 +304,17 @@ var Game = function(){
 		else{
 			game.wallTick++;
 		}
+	}
+	
+	this.spawnPlatform = function(){
+		if (this.platformTick >= this.platformMax){
+			this.platformTick = Math.random()*500+500;
+			var newObs = new game.Obstacle(canvas.height/2 - 25, 50, true);
+			newObs.w = 500;
+			game.obstacles.push(newObs);
+		}
+		else
+			this.platformTick++;
 	}
 	
 	this.floors = function(){
@@ -679,6 +698,7 @@ window.addEventListener("keyup", function (event) {
 		game.player.playeranimate();
 		if(game.transitioning === true){
 			game.spawnWall();
+			game.spawnPlatform();
 			game.obstacles.forEach(function(item) {
 				item.moveWall();
 				item.collision();
