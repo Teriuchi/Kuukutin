@@ -607,6 +607,9 @@ var Game = function(){
 					this.gravityspamblock = false;
 					this.diry = 0;
 				}
+				if (this.y <= 20 && this.gravityReversed === false){
+					this.y -= (this.jumptimetotal - this.jumpspeed);
+				}
 				if (this.y <= 20 && this.gravityReversed === true){
 					this.onground = true;
 					this.y = 20;
@@ -616,6 +619,9 @@ var Game = function(){
 					this.movestat = 1;
 					this.gravityspamblock = false;
 					this.diry = 0;
+				}
+				if (this.y+this.h >= canvas.height - 20 && this.gravityReversed === true){
+					this.y += (this.jumptimetotal - this.jumpspeed);
 				}
 			}
 		}
@@ -632,7 +638,7 @@ window.addEventListener("keydown", function (event) {
   switch (event.which) {
      case 90: if (game.player.jumping === true && game.player.gravityspamblock === false){ //Z key
 				game.player.gravityspamblock = true;
-				game.player.jumptimetotal = 0;
+				game.player.jumptimetotal = 30 - game.player.jumptimetotal;
 			 if(game.player.gravityReversed){
 				game.player.gravityReversed = false;
 			 }
