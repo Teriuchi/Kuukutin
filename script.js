@@ -344,58 +344,62 @@ var Game = function(){
 //Collision
 ////////////////////////
 	this.Obstacle.prototype.collision = function(){
-		if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y+5 && game.player.x <= this.x+this.w && game.player.y <= this.y +this.h-5)
-			switch(game.player.dirx){
-				case -1:
-							break;
-				case 0: game.player.x -= game.player.speed;
-						game.player.movestat = 0;
-							break;
-				case 1: game.player.x -= game.player.speed*2;
-						game.player.movestat = 0;
-							break;
-				default:
-			}
-		if (game.player.falling === true && game.player.jumptimetotal >= 18){
-			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h){
-				game.player.onground = true;
-				if(game.player.gravityReversed)
-					game.player.y = this.y+this.h;
-				else
-					game.player.y = this.y-60;
-				game.player.jumptimetotal = 0;
-				game.player.falling = false;
-				game.player.jumping = false;
-				game.player.movestat = 1;
-				game.player.gravityspamblock = false;
-				game.player.diry = 0;
-				this.jumpCollision = true;
+		if (!(game.player.movestat === 5)){
+			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y+5 && game.player.x <= this.x+this.w && game.player.y <= this.y +this.h-5)
+				switch(game.player.dirx){
+					case -1:
+								break;
+					case 0: game.player.x -= game.player.speed;
+							game.player.movestat = 0;
+								break;
+					case 1: game.player.x -= game.player.speed*2;
+							game.player.movestat = 0;
+								break;
+					default:
+				}
+			if (game.player.falling === true && game.player.jumptimetotal >= 18){
+				if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h){
+					game.player.onground = true;
+					if(game.player.gravityReversed)
+						game.player.y = this.y+this.h;
+					else
+						game.player.y = this.y-60;
+					game.player.jumptimetotal = 0;
+					game.player.falling = false;
+					game.player.jumping = false;
+					game.player.movestat = 1;
+					game.player.gravityspamblock = false;
+					game.player.diry = 0;
+					this.jumpCollision = true;
+				}
 			}
 		}
 	};
 	
 	this.Obstacle.prototype.collisionReset = function(){
-		if(this.jumpCollision){
-			if (!(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h)){
-				game.player.onground = false;
-				if (game.player.jumping){
-					game.player.falling = false;
-					game.player.jumptimetotal = 0;
+		if (!(game.player.movestat === 5)){
+			if(this.jumpCollision){
+				if (!(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h)){
+					game.player.onground = false;
+					if (game.player.jumping){
+						game.player.falling = false;
+						game.player.jumptimetotal = 0;
+					}
+					else{
+						game.player.falling = true;
+						game.player.jumptimetotal = 18;
+					}
+					this.jumpCollision = false;
 				}
-				else{
-					game.player.falling = true;
-					game.player.jumptimetotal = 18;
-				}
-				this.jumpCollision = false;
 			}
-		}
-		if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y + (this.h/3) && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h && game.player.gravityReversed === false){
-			game.player.y = this.y+this.h;
-			game.player.jumptimetotal = 18;
-		}
-		if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +(this.h/3) && game.player.gravityReversed === true){
-			game.player.y = this.y-60;
-			game.player.jumptimetotal = 18;
+			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y + (this.h/3) && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h && game.player.gravityReversed === false){
+				game.player.y = this.y+this.h;
+				game.player.jumptimetotal = 18;
+			}
+			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +(this.h/3) && game.player.gravityReversed === true){
+				game.player.y = this.y-60;
+				game.player.jumptimetotal = 18;
+			}
 		}
 	}
 /////////////////////
@@ -576,9 +580,9 @@ var Game = function(){
 		else{
 			switch(this.dirx){
 				case -1:this.movestat = 0; 
-					if(this.x <= 4){
+					/*if(this.x <= 4){
 							this.x = 4;
-						 }
+						 }*/
 							this.x -= this.speed;
 							break;
 				case 0: this.movestat = 1;
@@ -637,7 +641,7 @@ var Game = function(){
 					this.jumptimetotal = 18;
 				}
 			}
-			if(this.x <= -2){
+			if(this.x <= 0){
 				this.movestat = 5;
 			}
 		}
@@ -715,8 +719,6 @@ window.addEventListener("keyup", function (event) {
 		backgroundmid.draw();
 		backgroundback.draw();
 		game.floors();
-		game.player.movement();
-		game.player.playeranimate();
 		if(game.transitioning === true){
 			game.spawncoin();
 			game.coins.forEach(function(item) {
@@ -737,6 +739,8 @@ window.addEventListener("keyup", function (event) {
 		} else {
 			game.menuDraw();
 		}
+		game.player.movement();
+		game.player.playeranimate();
 	}
 }
 /////////////////////////
