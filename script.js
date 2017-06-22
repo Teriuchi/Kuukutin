@@ -278,14 +278,17 @@ var Game = function(){
 		}
 	};
 	this.Obstacle.prototype.moveWall = function(){
-		this.x -= 5;
+		
 		if(this.isPlatform){
+			this.x -= 7.5;
 			for(let i = 0; i<5; i++){
 				ctx.drawImage(this.img, 4, 0, 100, this.h, this.x+i*100, this.y, 100, this.h);
 			}
 		}
-		else
+		else{
+			this.x -= 5;
 			ctx.drawImage(this.img, 4, 0, 100, this.h, this.x, this.y, 100, this.h);
+		}
 	};
 	this.spawnWall = function(){
 		if(game.wallTick >= game.wallTickMax){
@@ -307,8 +310,14 @@ var Game = function(){
 	
 	this.spawnPlatform = function(){
 		if (this.platformTick >= this.platformMax){
+			let rng = Math.random();
 			this.platformTick = Math.random()*500+500;
-			var newObs = new game.Obstacle(canvas.height/2 - 25, 50, true);
+			if (rng < 0.5){
+				var newObs = new game.Obstacle(canvas.height/3 - 25, 50, true);
+			}
+			else{
+				var newObs = new game.Obstacle((canvas.height/3)*2 - 25, 50, true);
+			}
 			newObs.w = 500;
 			game.obstacles.push(newObs);
 		}
@@ -380,13 +389,13 @@ var Game = function(){
 				this.jumpCollision = false;
 			}
 		}
-		if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y + (this.h/2) && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h && game.player.gravityReversed === false){
+		if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y + (this.h/3) && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h && game.player.gravityReversed === false){
 			game.player.y = this.y+this.h;
-			game.player.y += game.player.jumpspeed;
+			game.player.jumptimetotal = 18;
 		}
-		if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +(this.h/2) && game.player.gravityReversed === true){
-			game.player.y = this.y;
-			game.player.y -= game.player.jumpspeed;
+		if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +(this.h/3) && game.player.gravityReversed === true){
+			game.player.y = this.y-60;
+			game.player.jumptimetotal = 18;
 		}
 	}
 /////////////////////
@@ -611,6 +620,7 @@ var Game = function(){
 				}
 				if (this.y <= 20 && this.gravityReversed === false){
 					this.y -= (this.jumptimetotal - this.jumpspeed);
+					this.jumptimetotal = 18;
 				}
 				if (this.y <= 20 && this.gravityReversed === true){
 					this.onground = true;
@@ -624,6 +634,7 @@ var Game = function(){
 				}
 				if (this.y+this.h >= canvas.height - 20 && this.gravityReversed === true){
 					this.y += (this.jumptimetotal - this.jumpspeed);
+					this.jumptimetotal = 18;
 				}
 			}
 			if(this.x <= -2){
@@ -707,17 +718,17 @@ window.addEventListener("keyup", function (event) {
 		game.player.movement();
 		game.player.playeranimate();
 		if(game.transitioning === true){
+			game.spawncoin();
+			game.coins.forEach(function(item) {
+				item.coinanimate();
+				item.collect();
+			});
 			game.spawnWall();
 			game.spawnPlatform();
 			game.obstacles.forEach(function(item) {
 				item.moveWall();
 				item.collision();
 				item.collisionReset();
-			});
-			game.spawncoin();
-			game.coins.forEach(function(item) {
-				item.coinanimate();
-				item.collect();
 			});
 			game.score.draw();
 			if(game.score.addingTime)
