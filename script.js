@@ -304,20 +304,14 @@ var Game = function(){
 			game.wallTick = 0;
 		}
 		else{
-			if(game.score > 100 && game.score < 250)
+			if(game.score > 100 && game.score < 500)
+				game.wallTick = game.wallTick + 2;
+			else if(game.score.score >= 500 && game.score.score < 700)
+				game.wallTick = game.wallTick + 3;
+			else if(game.score.score >= 700 && game.score.score < 1000)
+				game.wallTick = game.wallTick + 4;
+			else if(game.score.score >= 1000)
 				game.wallTick = game.wallTick + 5;
-			else if(game.score.score >= 250 && game.score < 400)
-				game.wallTick = game.wallTick + 10;
-			else if(game.score.score >= 400 && game.score < 600)
-				game.wallTick = game.wallTick + 15;
-			else if(game.score.score >= 600 && game.score < 800)
-				game.wallTick = game.wallTick + 20;
-			else if(game.score.score >= 800 && game.score < 950)
-				game.wallTick = game.wallTick + 25;
-			else if(game.score.score >= 950 && game.score < 1125)
-				game.wallTick = game.wallTick + 30;
-			else if(game.score.score >= 1125 && game.score < 1500)
-				game.wallTick = game.wallTick + 35;
 			else	
 				game.wallTick++;
 		}
