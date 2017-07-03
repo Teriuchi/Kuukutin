@@ -304,7 +304,22 @@ var Game = function(){
 			game.wallTick = 0;
 		}
 		else{
-			game.wallTick++;
+			if(game.score > 100 && game.score < 250)
+				game.wallTick = game.wallTick + 2;
+			else if(game.score >= 250 && game.score < 400)
+				game.wallTick = game.wallTick + 3;
+			else if(game.score >= 400 && game.score < 600)
+				game.wallTick = game.wallTick + 4;
+			else if(game.score >= 600 && game.score < 800)
+				game.wallTick = game.wallTick + 5;
+			else if(game.score >= 800 && game.score < 950)
+				game.wallTick = game.wallTick + 7;
+			else if(game.score >= 950 && game.score < 1125)
+				game.wallTick = game.wallTick + 9;
+			else if(game.score >= 1125 && game.score < 1500)
+				game.wallTick = game.wallTick + 11;
+			else	
+				game.wallTick++;
 		}
 	}
 	
@@ -312,9 +327,11 @@ var Game = function(){
 		if (this.platformTick >= this.platformMax){
 			let rng = Math.random();
 			this.platformTick = Math.random()*500+500;
-			if (rng < 0.5){
+			if (rng < 0.3){
 				var newObs = new game.Obstacle(canvas.height/3 - 25, 50, true);
 			}
+			else if(rng >= 0.3 && rng < 0.6)
+				var newObs = new game.Obstacle(canvas.height/2 - 25, 50, true);
 			else{
 				var newObs = new game.Obstacle((canvas.height/3)*2 - 25, 50, true);
 			}
@@ -353,7 +370,7 @@ var Game = function(){
 							game.player.movestat = 0;
 								break;
 					case 1: game.player.x -= game.player.speed*2;
-							game.player.movestat = 0;
+							game.player.movestat = 1;
 								break;
 					default:
 				}
@@ -363,7 +380,7 @@ var Game = function(){
 					if(game.player.gravityReversed)
 						game.player.y = this.y+this.h;
 					else
-						game.player.y = this.y-60;
+						game.player.y = this.y-game.player.h;
 					game.player.jumptimetotal = 0;
 					game.player.falling = false;
 					game.player.jumping = false;
@@ -392,12 +409,14 @@ var Game = function(){
 					this.jumpCollision = false;
 				}
 			}
-			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y + (this.h/3) && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h && game.player.gravityReversed === false){
+			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y + (this.h/3) && game.player.x <= this.x+this.w-10 //Gravity down 
+				&& game.player.y <= this.y +this.h && game.player.gravityReversed === false){
 				game.player.y = this.y+this.h;
 				game.player.jumptimetotal = 18;
 			}
-			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +(this.h/3) && game.player.gravityReversed === true){
-				game.player.y = this.y-60;
+			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y 
+				&& game.player.x <= this.x+this.w-10 && game.player.y <= this.y +(this.h/3) && game.player.gravityReversed === true){ // Gravity up
+				game.player.y = this.y-game.player.h;
 				game.player.jumptimetotal = 18;
 			}
 		}
