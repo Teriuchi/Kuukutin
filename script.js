@@ -278,7 +278,6 @@ var Game = function(){
 		}
 	};
 	this.Obstacle.prototype.moveWall = function(){
-		
 		if(this.isPlatform){
 			this.x -= 7.5;
 			for(let i = 0; i<5; i++){
@@ -593,20 +592,16 @@ var Game = function(){
 		else{
 			switch(this.dirx){
 				case -1:this.movestat = 0; 
-					/*if(this.x <= 4){
-							this.x = 4;
-						 }*/
 							this.x -= this.speed;
 							break;
 				case 0: this.movestat = 1;
-					break;
+							break;
 				case 1: this.movestat = 1;
-					if(this.x >= canvas.width - this.runw){
+						if(this.x >= canvas.width - this.runw){
 							this.x = canvas.width - this.runw;
 						}
 							this.x += this.speed;
 							break;
-				default:
 			}
 			if (this.onground === false){
 				this.movestat = 3;
@@ -654,7 +649,7 @@ var Game = function(){
 					this.jumptimetotal = 18;
 				}
 			}
-			if(this.x <= 0){
+			if(this.x <= 0 || this.y < 10 || this.y > canvas.height){
 				this.movestat = 5;
 			}
 		}
@@ -668,34 +663,31 @@ window.addEventListener("keydown", function (event) {
     return;
   }
 
-  switch (event.which) {
-     case 90: if (game.player.jumping === true && game.player.gravityspamblock === false){ //Z key
-				game.player.gravityspamblock = true;
-				game.player.jumptimetotal = 30 - game.player.jumptimetotal;
-			 if(game.player.gravityReversed){
-				game.player.gravityReversed = false;
-			 }
-			 else{
-				game.player.gravityReversed = true;
-			 }
-				game.player.gravitynegative = game.player.gravitynegative*-1;
-			 }
-			 break;
-    case 37: game.player.dirx = -1; //Left Arrow
-			 break;
-    case 38: if(game.player.onground){ //Up Arrow
-				game.player.onground = false;
-				game.player.jumping = true;
-			 }
-			 break;
-    case 39: game.player.dirx = 1; // Right Arrow
-		break;
-    case 40: game.spawncoin();
-		break;
-    default:
-      return;
-  }
-  event.preventDefault();
+	switch (event.which) {
+		case 90: 	if (game.player.jumping === true && game.player.gravityspamblock === false){ //Z key
+						game.player.gravityspamblock = true;
+						game.player.jumptimetotal = 30 - game.player.jumptimetotal;
+							if(game.player.gravityReversed){
+								game.player.gravityReversed = false;
+							}
+					else{
+						game.player.gravityReversed = true;
+					}
+					game.player.gravitynegative = game.player.gravitynegative*-1;
+					}
+					break;
+		case 37: 	game.player.dirx = -1; //Left Arrow
+					break;
+		case 38: 	if(game.player.onground){ //Up Arrow
+						game.player.onground = false;
+						game.player.jumping = true;
+					}
+					break;
+		case 39: 	game.player.dirx = 1; // Right Arrow
+					break;
+      //return;
+	}
+	event.preventDefault();
 }, true);
 
 window.addEventListener("keyup", function (event) {
