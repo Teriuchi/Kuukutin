@@ -246,11 +246,7 @@ var Game = function(){
 						this.attackframe = 0;
 					}
 					break;
-			default:
 		}
-	}
-	this.player.resetframes = function(){ //implemented for future usage
-		this.tick = this.idleframe = this.runframe = this.jumpframe = this.deathframe = this.attackframe = 0;
 	}
 /////////////////////
 //Obstacles
@@ -268,7 +264,7 @@ var Game = function(){
 		this.isPlatform = platform;
 	}
 	this.Obstacle.prototype.collision = function(){
-		if (this.x < -1000){
+		if (this.x < -500){
 			for(var i = 0; i < game.obstacles.length; i++) {
 				if (game.obstacles[i].x === this.x && game.obstacles[i].y === this.y){
 					game.obstacles.splice(i,1);
@@ -303,13 +299,13 @@ var Game = function(){
 			game.wallTick = 0;
 		}
 		else{
-			if(game.score > 100 && game.score < 500)
+			if(game.score.score + game.score.scoreReserve > 100 && game.score.score + game.score.scoreReserve < 500)
 				game.wallTick = game.wallTick + 2;
-			else if(game.score.score >= 500 && game.score.score < 700)
+			else if(game.score.score + game.score.scoreReserve >= 500 && game.score.score + game.score.scoreReserve < 700)
 				game.wallTick = game.wallTick + 3;
-			else if(game.score.score >= 700 && game.score.score < 1000)
+			else if(game.score.score + game.score.scoreReserve >= 700 && game.score.score + game.score.scoreReserve < 1000)
 				game.wallTick = game.wallTick + 4;
-			else if(game.score.score >= 1000)
+			else if(game.score.score + game.score.scoreReserve >= 1000)
 				game.wallTick = game.wallTick + 5;
 			else	
 				game.wallTick++;
@@ -389,7 +385,7 @@ var Game = function(){
 	this.Obstacle.prototype.collisionReset = function(){
 		if (!(game.player.movestat === 5)){
 			if(this.jumpCollision){
-				if (!(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h)){
+				if(!(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h)){
 					game.player.onground = false;
 					if (game.player.jumping){
 						game.player.falling = false;
@@ -402,12 +398,12 @@ var Game = function(){
 					this.jumpCollision = false;
 				}
 			}
-			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y + (this.h/3) && game.player.x <= this.x+this.w-10 //Gravity down 
+			if(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y + (this.h/3) && game.player.x <= this.x+this.w-10 //Gravity down 
 				&& game.player.y <= this.y +this.h && game.player.gravityReversed === false){
 				game.player.y = this.y+this.h;
 				game.player.jumptimetotal = 18;
 			}
-			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y 
+			if(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y 
 				&& game.player.x <= this.x+this.w-10 && game.player.y <= this.y +(this.h/3) && game.player.gravityReversed === true){ // Gravity up
 				game.player.y = this.y-game.player.h;
 				game.player.jumptimetotal = 18;
@@ -453,7 +449,7 @@ var Game = function(){
 			this.x -=2.5;
 		};
 	this.Coin.prototype.collect = function(){
-			if (this.x+(this.w/2) < game.player.w+game.player.x && this.x+(this.w/2) > game.player.x && this.y+(this.h/2) < game.player.y+game.player.h && this.y+(this.h/2) > game.player.y){
+			if(this.x+(this.w/2) < game.player.w+game.player.x && this.x+(this.w/2) > game.player.x && this.y+(this.h/2) < game.player.y+game.player.h && this.y+(this.h/2) > game.player.y){
 				if (this.points === 10){
 					game.score.addingTime = true;
 					game.score.addTick = 0;
@@ -539,7 +535,7 @@ var Game = function(){
 		scoreAdd: 0,
 		scoreTrans: 1,
 		addTick: 0,
-		addTickMax: 150,
+		addTickMax: 250,
 		addingTime: false,
 		multiplier: 0.9,
 		scoreReserve: 0
@@ -572,7 +568,7 @@ var Game = function(){
 			ctx.globalAlpha = this.scoreTrans;
 			ctx.fillText("Score: "+this.score +" +"+this.scoreAdd +" x" + this.multiplier,this.x,this.y);
 			ctx.globalAlpha = 1;
-			this.scoreTrans -= 0.0066666667;
+			this.scoreTrans -= 0.0036666667;
 		}
 	}
 	this.score.moarPoints = function(){
@@ -603,7 +599,7 @@ var Game = function(){
 							this.x += this.speed;
 							break;
 			}
-			if (this.onground === false){
+			if(this.onground === false){
 				this.movestat = 3;
 				if (this.falling === false){
 					this.jumptimetotal += 0.4;
@@ -619,37 +615,37 @@ var Game = function(){
 					this.y += (this.jumptimetotal - this.jumpspeed)*this.gravitynegative;
 				}
 			}
-			if (this.falling === true){
-				if (this.y+this.h >= canvas.height - 20 && this.gravityReversed === false){
+			if(this.falling === true){
+				if(this.y+this.h >= canvas.height - 20 && this.gravityReversed === false){
 					this.onground = true;
 					this.y = canvas.height-this.h - 20;
 					this.jumptimetotal = 0;
 					this.falling = false;
 					this.jumping = false;
 					this.movestat = 1;
-					this.gravityspamblock = false;
 					this.diry = 0;
+					this.gravityspamblock = false;
 				}
-				if (this.y <= 20 && this.gravityReversed === false){
-					this.y -= (this.jumptimetotal - this.jumpspeed);
-					this.jumptimetotal = 18;
+				if(this.y <= 20 && this.gravityReversed === false && this.y < (-canvas.height + game.player.h)){
+						this.y -= (this.jumptimetotal - this.jumpspeed);
+						this.jumptimetotal = 18;
 				}
-				if (this.y <= 20 && this.gravityReversed === true){
+				if(this.y <= 20 && this.gravityReversed === true){
 					this.onground = true;
 					this.y = 20;
 					this.jumptimetotal = 0;
 					this.falling = false;
 					this.jumping = false;
 					this.movestat = 1;
-					this.gravityspamblock = false;
 					this.diry = 0;
+					this.gravityspamblock = false;
 				}
-				if (this.y+this.h >= canvas.height - 20 && this.gravityReversed === true){
+				if(this.y+this.h >= canvas.height - 20 && this.gravityReversed === true && this.y < (canvas.height - game.player.h)){
 					this.y += (this.jumptimetotal - this.jumpspeed);
 					this.jumptimetotal = 18;
 				}
 			}
-			if(this.x <= 0 || this.y < 10 || this.y > canvas.height){
+			if(this.x <= 0 || this.y < 0 || this.y > canvas.height){
 				this.movestat = 5;
 			}
 		}
@@ -659,60 +655,57 @@ var Game = function(){
 /////////////////////
 
 window.addEventListener("keydown", function (event) {
-  if (event.defaultPrevented) {
-    return;
-  }
-
+	if(event.defaultPrevented)
+		return;
+	if(event.repeat)
+		return;
 	switch (event.which) {
-		case 90: 	if (game.player.jumping === true && game.player.gravityspamblock === false){ //Z key
+		case 90: 	if(game.player.jumping === true && game.player.gravityspamblock === false){ //Z key
 						game.player.gravityspamblock = true;
 						game.player.jumptimetotal = 30 - game.player.jumptimetotal;
 							if(game.player.gravityReversed){
 								game.player.gravityReversed = false;
 							}
-					else{
-						game.player.gravityReversed = true;
-					}
-					game.player.gravitynegative = game.player.gravitynegative*-1;
+						else{
+							game.player.gravityReversed = true;
+						}
+						game.player.gravitynegative = game.player.gravitynegative*-1;
 					}
 					break;
 		case 37: 	game.player.dirx = -1; //Left Arrow
 					break;
 		case 38: 	if(game.player.onground){ //Up Arrow
-						game.player.onground = false;
 						game.player.jumping = true;
+						game.player.onground = false;
 					}
 					break;
 		case 39: 	game.player.dirx = 1; // Right Arrow
 					break;
-      //return;
+		case 116:	location.reload();
+      return;
 	}
 	event.preventDefault();
 }, true);
 
 window.addEventListener("keyup", function (event) {
-  if (event.defaultPrevented) {
+  if (event.defaultPrevented)
     return;
-  }
-
-  switch (event.which) {
-    case 32: game.transitioning = true;
-		break;
-    case 37:if (game.player.dirx === -1) 
+	switch (event.which) {
+		case 32: 	game.transitioning = true;
+					break;
+		case 37:	if (game.player.dirx === -1)
 					game.player.dirx = 0;
-		break;
-    case 38:
-			game.player.falling = true;
-		break;
-    case 39: if (game.player.dirx === 1) 
+					break;			
+		case 38:	game.player.falling = true;
+					break;
+		case 39: 	if (game.player.dirx === 1)
 					game.player.dirx = 0;
-		break;
-    case 75: game.player.movestat = 5;
-		break;
-    default:
-      return;
-  }
-  event.preventDefault();
+					break;
+		case 75: 	game.player.movestat = 5;
+					break;
+		return;
+	}
+	event.preventDefault();
 }, true);
 ////////////////////////
 //Animation
