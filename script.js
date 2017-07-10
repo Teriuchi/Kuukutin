@@ -311,7 +311,6 @@ var Game = function(){
 				game.wallTick++;
 		}
 	}
-	
 	this.spawnPlatform = function(){
 		if (this.platformTick >= this.platformMax){
 			let rng = Math.random();
@@ -330,7 +329,6 @@ var Game = function(){
 		else
 			this.platformTick++;
 	}
-	
 	this.floors = function(){
 		let canvasBlocks = Math.ceil(canvas.width / 100) +1;
 		for (let x=0;x<canvasBlocks;x++){
@@ -380,8 +378,7 @@ var Game = function(){
 				}
 			}
 		}
-	};
-	
+	};	
 	this.Obstacle.prototype.collisionReset = function(){
 		if (!(game.player.movestat === 5)){
 			if(this.jumpCollision){
@@ -576,8 +573,7 @@ var Game = function(){
 			this.score++;
 			this.scoreReserve--;
 		}
-	}
-		
+	}		
 ////////////////////////
 //Movement
 ////////////////////////
@@ -605,7 +601,7 @@ var Game = function(){
 					this.jumptimetotal += 0.4;
 					this.diry = -1 * this.gravitynegative;
 					this.y -= (this.jumpspeed - this.jumptimetotal)*this.gravitynegative;
-					if (this.jumptimetotal === this.jumpspeed){
+					if (this.jumptimetotal >= this.jumpspeed){
 						this.falling = true;
 					}
 				}
@@ -653,12 +649,13 @@ var Game = function(){
 /////////////////////
 //Controls
 /////////////////////
-
 window.addEventListener("keydown", function (event) {
 	if(event.defaultPrevented)
 		return;
 	if(event.repeat)
-		return;
+		switch (event.which){
+			case 38:	game.player.falling = true;
+		}
 	if(game.transitioning){
 		switch (event.which) {
 			case 90: 	if(game.player.jumping === true && game.player.gravityspamblock === false){ //Z key
@@ -682,13 +679,11 @@ window.addEventListener("keydown", function (event) {
 						break;
 			case 39: 	game.player.dirx = 1; // Right Arrow
 						break;
-			case 116:	location.reload();
 		return;
 		}
 	}
 	event.preventDefault();
 }, true);
-
 window.addEventListener("keyup", function (event) {
   if (event.defaultPrevented)
     return;
@@ -705,6 +700,8 @@ window.addEventListener("keyup", function (event) {
 					break;
 		case 75: 	game.player.movestat = 5;
 					break;
+		case 116:	location.reload();
+		
 		return;
 	}
 	event.preventDefault();
@@ -712,7 +709,6 @@ window.addEventListener("keyup", function (event) {
 ////////////////////////
 //Animation
 ////////////////////////
-
 	this.animate = function(){
 		requestAnimationFrame(game.animate);
 		backgroundbase.draw();
