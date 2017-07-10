@@ -659,30 +659,32 @@ window.addEventListener("keydown", function (event) {
 		return;
 	if(event.repeat)
 		return;
-	switch (event.which) {
-		case 90: 	if(game.player.jumping === true && game.player.gravityspamblock === false){ //Z key
-						game.player.gravityspamblock = true;
-						game.player.jumptimetotal = 30 - game.player.jumptimetotal;
-							if(game.player.gravityReversed){
-								game.player.gravityReversed = false;
+	if(game.transitioning){
+		switch (event.which) {
+			case 90: 	if(game.player.jumping === true && game.player.gravityspamblock === false){ //Z key
+							game.player.gravityspamblock = true;
+							game.player.jumptimetotal = 30 - game.player.jumptimetotal;
+								if(game.player.gravityReversed){
+									game.player.gravityReversed = false;
+								}
+							else{
+								game.player.gravityReversed = true;
 							}
-						else{
-							game.player.gravityReversed = true;
+							game.player.gravitynegative = game.player.gravitynegative*-1;
 						}
-						game.player.gravitynegative = game.player.gravitynegative*-1;
-					}
-					break;
-		case 37: 	game.player.dirx = -1; //Left Arrow
-					break;
-		case 38: 	if(game.player.onground){ //Up Arrow
-						game.player.jumping = true;
-						game.player.onground = false;
-					}
-					break;
-		case 39: 	game.player.dirx = 1; // Right Arrow
-					break;
-		case 116:	location.reload();
-      return;
+						break;
+			case 37: 	game.player.dirx = -1; //Left Arrow
+						break;
+			case 38: 	if(game.player.onground){ //Up Arrow
+							game.player.jumping = true;
+							game.player.onground = false;
+						}
+						break;
+			case 39: 	game.player.dirx = 1; // Right Arrow
+						break;
+			case 116:	location.reload();
+		return;
+		}
 	}
 	event.preventDefault();
 }, true);
