@@ -34,20 +34,20 @@ var Game = function(){
 	this.wallTickMax = 199;
 	this.transitioning = false;
 	this.platformMax = 1100;
-	this.platformTick = Math.random()*500+600;
+	this.platformTick = Math.random() * 500 + 600;
 /////////////////////
 //Start Menu
 /////////////////////	
 	this.menuDraw = function() {
 		ctx.fillStyle = 'black';
 		ctx.font = '48px serif';
-		ctx.fillText('Kuukutin', (canvas.width/2)-100, 350);
+		ctx.fillText('Kuukutin', (canvas.width / 2) - 100, 350);
 		ctx.font = '24px verdana';
-		ctx.fillText('Control Kuukutin by using arrow keys.', (canvas.width/2)-242, (canvas.height/2)-50);	
+		ctx.fillText('Control Kuukutin by using arrow keys.', (canvas.width / 2) - 242, (canvas.height / 2) - 50);	
 		ctx.font = '24px';
-		ctx.fillText('While midair, you can switch your gravity by pressing Z-key.', (canvas.width/2)-350, (canvas.height/2));
+		ctx.fillText('While midair, you can switch your gravity by pressing Z-key.', (canvas.width / 2) - 350, (canvas.height / 2));
 		ctx.font = '24px verdana';
-		ctx.fillText('Press spacebar to begin your journey', (canvas.width/2)-240, (canvas.height/2)+150);		
+		ctx.fillText('Press spacebar to begin your journey!', (canvas.width / 2) - 240, (canvas.height / 2) + 150);		
 	}
 /////////////////////
 //Player character
@@ -105,10 +105,10 @@ var Game = function(){
 					if (this.gravityReversed){
 						ctx.save();
 						ctx.scale(1, -1);
-						ctx.drawImage(this.img,18+(this.idleframe*64),24,26,30,this.x,(this.y*-1)-this.h,this.w,this.h);
+						ctx.drawImage(this.img,18 + (this.idleframe * 64), 24, 26, 30, this.x, (this.y * -1) - this.h, this.w, this.h);
 					}
 					else
-						ctx.drawImage(this.img,18+(this.idleframe*64),24,26,30,this.x,this.y,this.w,this.h);
+						ctx.drawImage(this.img, 18 + (this.idleframe * 64), 24, 26, 30, this.x, this.y, this.w, this.h);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.idletickmax){
@@ -126,10 +126,11 @@ var Game = function(){
 					if (this.gravityReversed){
 						ctx.save();
 						ctx.scale(1, -1);
-						ctx.drawImage(this.img,18+(this.runframe*64),82,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
+						ctx.drawImage(this.img, 18 + (this.runframe * 64), 82, 30, 36, this.x,
+						(this.y * -1) - 12 - this.h, this.runw, this.runh);
 					}
 					else
-						ctx.drawImage(this.img,18+(this.runframe*64),82,30,36,this.x,this.y-12,this.runw,this.runh);
+						ctx.drawImage(this.img,18 + (this.runframe * 64),82,30,36,this.x,this.y - 12,this.runw,this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.runtickmax){
@@ -147,10 +148,12 @@ var Game = function(){
 					if (this.gravityReversed){
 						ctx.save();
 						ctx.scale(1, -1);
-						ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
+						ctx.drawImage(this.img, 18 + (this.jumpframe * 64), 338, 30, 36, this.x,
+						(this.y * -1) - 12 - this.h,this.runw,this.runh);
 					}
 					else
-						ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+						ctx.drawImage(this.img, 18 + (this.jumpframe * 64), 
+						338, 30, 36, this.x, this.y - 12, this.runw, this.runh);
 					if (this.tick <= this.jumptickmax){
 						this.tick++;
 					}
@@ -166,10 +169,11 @@ var Game = function(){
 					if (this.gravityReversed){
 						ctx.save();
 						ctx.scale(1, -1);
-						ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
+						ctx.drawImage(this.img, 18 + (this.jumpframe * 64),
+						338, 30, 36, this.x, (this.y * - 1) - 12 - this.h, this.runw, this.runh);
 					}
 					else
-						ctx.drawImage(this.img,18+(this.jumpframe*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+						ctx.drawImage(this.img,18 + (this.jumpframe * 64), 338, 30, 36, this.x, this.y - 12, this.runw, this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.jumplooptickmax){
@@ -188,10 +192,10 @@ var Game = function(){
 					if (this.gravityReversed){
 						ctx.save();
 						ctx.scale(1, -1);
-						ctx.drawImage(this.img,18+(7*64),338,30,36,this.x,(this.y*-1)-12-this.h,this.runw,this.runh);
+						ctx.drawImage(this.img,18 + (7 * 64), 338, 30, 36, this.x, (this.y * -1) - 12 - this.h,this.runw,this.runh);
 					}
 					else
-						ctx.drawImage(this.img,18+(7*64),338,30,36,this.x,this.y-12,this.runw,this.runh);
+						ctx.drawImage(this.img,18 + (7 * 64), 338, 30, 36, this.x, this.y - 12, this.runw, this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.jumptickmax){
@@ -207,10 +211,12 @@ var Game = function(){
 					if (this.gravityReversed){
 						ctx.save();
 						ctx.scale(1, -1);
-						ctx.drawImage(this.img,14+(this.deathframe*64),212,34,36,this.x-6,(this.y*-1)-8-this.h,this.runw+10,this.runh);
+						ctx.drawImage(this.img, 14 + (this.deathframe * 64), 212, 34, 36, this.x - 6,
+						(this.y * -1) - 8 - this.h, this.runw + 10, this.runh);
 					}
 					else
-						ctx.drawImage(this.img,14+(this.deathframe*64),212,34,36,this.x-6,this.y-8,this.runw+10,this.runh);
+						ctx.drawImage(this.img, 14 + (this.deathframe * 64)
+						, 212, 34, 36, this.x - 6,this.y - 8, this.runw + 10, this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.deathtickmax){
@@ -229,10 +235,11 @@ var Game = function(){
 					if (this.gravityReversed){
 						ctx.save();
 						ctx.scale(1, -1);
-						ctx.drawImage(this.img,18+(this.attackframe*64),148,30,36,this.x,(this.y*-1)-8-this.h,this.runw,this.runh);
+						ctx.drawImage(this.img, 18 + (this.attackframe * 64),
+						148, 30, 36, this.x,(this.y * -1) - 8 - this.h, this.runw, this.runh);
 					}
 					else
-						ctx.drawImage(this.img,18+(this.attackframe*64),148,30,36,this.x,this.y-8,this.runw,this.runh);
+						ctx.drawImage(this.img, 18 + (this.attackframe * 64), 148, 30, 36, this.x, this.y - 8, this.runw, this.runh);
 					if (this.gravityReversed)
 						ctx.restore();
 					if (this.tick <= this.attacktickmax){
@@ -276,8 +283,8 @@ var Game = function(){
 	this.Obstacle.prototype.moveWall = function(){
 		if(this.isPlatform){
 			this.x -= 7.5;
-			for(let i = 0; i<5; i++){
-				ctx.drawImage(this.img, 4, 0, 100, this.h, this.x+i*100, this.y, 100, this.h);
+			for(let i = 0; i < 5; i++){
+				ctx.drawImage(this.img, 4, 0, 100, this.h, this.x + i * 100, this.y, 100, this.h);
 			}
 		}
 		else{
@@ -288,10 +295,10 @@ var Game = function(){
 	this.spawnWall = function(){
 		if(game.wallTick >= game.wallTickMax){
 			let h = Math.ceil((4));
-			h = h*50;
+			h = h * 50;
 			let rng = Math.random();
 			if(rng > 0.5){
-				var newObs = new game.Obstacle(canvas.height-20-h, h, false);
+				var newObs = new game.Obstacle(canvas.height - 20 - h, h, false);
 			} else{
 				var newObs = new game.Obstacle(20, h, false);
 			}
@@ -314,14 +321,14 @@ var Game = function(){
 	this.spawnPlatform = function(){
 		if (this.platformTick >= this.platformMax){
 			let rng = Math.random();
-			this.platformTick = Math.random()*500+500;
+			this.platformTick = Math.random() * 500 + 500;
 			if (rng < 0.3){
-				var newObs = new game.Obstacle(canvas.height/3 - 25, 50, true);
+				var newObs = new game.Obstacle(canvas.height / 3 - 25, 50, true);
 			}
 			else if(rng >= 0.3 && rng < 0.6)
-				var newObs = new game.Obstacle(canvas.height/2 - 25, 50, true);
+				var newObs = new game.Obstacle(canvas.height / 2 - 25, 50, true);
 			else{
-				var newObs = new game.Obstacle((canvas.height/3)*2 - 25, 50, true);
+				var newObs = new game.Obstacle((canvas.height / 3) * 2 - 25, 50, true);
 			}
 			newObs.w = 500;
 			game.obstacles.push(newObs);
@@ -330,12 +337,12 @@ var Game = function(){
 			this.platformTick++;
 	}
 	this.floors = function(){
-		let canvasBlocks = Math.ceil(canvas.width / 100) +1;
+		let canvasBlocks = Math.ceil(canvas.width / 100) + 1;
 		for (let x=0;x<canvasBlocks;x++){
-				ctx.drawImage(this.imgobs, 4, 0, 100, 50, (x*100) - game.floorTick, canvas.height-20, 100, 50);
+				ctx.drawImage(this.imgobs, 4, 0, 100, 50, (x * 100) - game.floorTick, canvas.height - 20, 100, 50);
 		}
 		for (let x=0;x<canvasBlocks;x++){
-				ctx.drawImage(this.imgobs, 4, 0, 100, 50, (x*100) - game.floorTick, -30, 100, 50);
+				ctx.drawImage(this.imgobs, 4, 0, 100, 50, (x * 100) - game.floorTick, -30, 100, 50);
 		}
 		if(game.floorTick >= game.floorTickMax){
 			game.floorTick = 0;
@@ -348,26 +355,26 @@ var Game = function(){
 //Collision
 ////////////////////////
 	this.Obstacle.prototype.collision = function(){
-		if (!(game.player.movestat === 5)){
-			if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y+5 && game.player.x <= this.x+this.w && game.player.y <= this.y +this.h-5)
+		if(!(game.player.movestat === 5)){
+			if (game.player.x + game.player.w - 5 >= this.x && game.player.y + game.player.h >= this.y + 5 
+			&& game.player.x <= this.x + this.w && game.player.y <= this.y + this.h - 5)
 				switch(game.player.dirx){
-					case -1:
+					case -1:	break;
+					case 0: 	game.player.x -= game.player.speed;
+								game.player.movestat = 0;
 								break;
-					case 0: game.player.x -= game.player.speed;
-							game.player.movestat = 0;
+					case 1: 	game.player.x -= game.player.speed * 2;
+								game.player.movestat = 1;
 								break;
-					case 1: game.player.x -= game.player.speed*2;
-							game.player.movestat = 1;
-								break;
-					default:
 				}
-			if (game.player.falling === true && game.player.jumptimetotal >= 18){
-				if (game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h){
+			if(game.player.falling === true && game.player.jumptimetotal >= 18){
+				if (game.player.x + game.player.w - 5 >= this.x && game.player.y + game.player.h >= this.y 
+				&& game.player.x <= this.x + this.w - 10 && game.player.y <= this.y + this.h){
 					game.player.onground = true;
 					if(game.player.gravityReversed)
-						game.player.y = this.y+this.h;
+						game.player.y = this.y + this.h;
 					else
-						game.player.y = this.y-game.player.h;
+						game.player.y = this.y - game.player.h;
 					game.player.jumptimetotal = 0;
 					game.player.falling = false;
 					game.player.jumping = false;
@@ -382,7 +389,8 @@ var Game = function(){
 	this.Obstacle.prototype.collisionReset = function(){
 		if (!(game.player.movestat === 5)){
 			if(this.jumpCollision){
-				if(!(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y && game.player.x <= this.x+this.w-10 && game.player.y <= this.y +this.h)){
+				if(!(game.player.x + game.player.w - 5 >= this.x && game.player.y + game.player.h >= this.y 
+				&& game.player.x <= this.x + this.w - 10 && game.player.y <= this.y + this.h)){
 					game.player.onground = false;
 					if (game.player.jumping){
 						game.player.falling = false;
@@ -395,14 +403,16 @@ var Game = function(){
 					this.jumpCollision = false;
 				}
 			}
-			if(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y + (this.h/3) && game.player.x <= this.x+this.w-10 //Gravity down 
-				&& game.player.y <= this.y +this.h && game.player.gravityReversed === false){
-				game.player.y = this.y+this.h;
+			if(game.player.x + game.player.w - 5 >= this.x && game.player.y + game.player.h >= this.y + (this.h / 3) 
+			&& game.player.x <= this.x + this.w - 10 //Gravity down 
+				&& game.player.y <= this.y + this.h && game.player.gravityReversed === false){
+				game.player.y = this.y + this.h;
 				game.player.jumptimetotal = 18;
 			}
-			if(game.player.x+game.player.w-5 >= this.x && game.player.y+game.player.h >= this.y 
-				&& game.player.x <= this.x+this.w-10 && game.player.y <= this.y +(this.h/3) && game.player.gravityReversed === true){ // Gravity up
-				game.player.y = this.y-game.player.h;
+			if(game.player.x + game.player.w - 5 >= this.x && game.player.y + game.player.h >= this.y 
+			&& game.player.x <= this.x + this.w - 10 && game.player.y <= this.y + (this.h / 3) 
+			&& game.player.gravityReversed === true){ // Gravity up
+				game.player.y = this.y - game.player.h;
 				game.player.jumptimetotal = 18;
 			}
 		}
@@ -431,7 +441,7 @@ var Game = function(){
 	}
 	this.Coin.prototype.coinanimate = function(){
 			ctx.globalAlpha = this.transparency;
-			ctx.drawImage(this.img,(this.curframe*16),0,15,16,this.x,this.y,this.w,this.h);
+			ctx.drawImage(this.img, (this.curframe * 16), 0, 15, 16, this.x, this.y, this.w, this.h);
 			ctx.globalAlpha = 1;
 			if (this.tick <= this.tickmax){
 				this.tick++;
@@ -443,10 +453,11 @@ var Game = function(){
 			if (this.curframe >= this.maxframe){
 				this.curframe = 0;
 			}
-			this.x -=2.5;
+			this.x -= 2.5;
 		};
 	this.Coin.prototype.collect = function(){
-			if(this.x+(this.w/2) < game.player.w+game.player.x && this.x+(this.w/2) > game.player.x && this.y+(this.h/2) < game.player.y+game.player.h && this.y+(this.h/2) > game.player.y){
+			if(this.x + (this.w / 2) < game.player.w + game.player.x && this.x + (this.w / 2) > game.player.x && this.y + (this.h / 2) 
+				< game.player.y + game.player.h && this.y + (this.h / 2) > game.player.y){
 				if (this.points === 10){
 					game.score.addingTime = true;
 					game.score.addTick = 0;
@@ -478,7 +489,7 @@ var Game = function(){
 					}
 				}
 				else{
-					this.y -= 1.5*game.player.gravitynegative;
+					this.y -= 1.5 * game.player.gravitynegative;
 					this.disappear++;
 					this.transparency -= 0.03333333
 				}
@@ -486,10 +497,10 @@ var Game = function(){
 		};
 	this.spawncoin = function(){
 		if(game.coinTick >= game.coinTickMax){
-			let canvasheight = Math.ceil(canvas.height/7)
-			let newCoin = new game.Coin(canvas.width, Math.ceil(Math.random()*6)*canvasheight - 12);
+			let canvasheight = Math.ceil(canvas.height / 7)
+			let newCoin = new game.Coin(canvas.width, Math.ceil(Math.random() * 6) * canvasheight - 12);
 			game.coins.push(newCoin);
-			game.coinTick = Math.random()*190;
+			game.coinTick = Math.random() * 190;
 		}
 		else{
 			game.coinTick++;
@@ -541,7 +552,7 @@ var Game = function(){
 	this.score.draw = function(){
 		ctx.fillStyle = this.color;
 		ctx.font = this.font;
-		ctx.fillText("Score: "+this.score,this.x,this.y);
+		ctx.fillText("Score: " + this.score, this.x, this.y);
 		if(game.score.scoreTick < game.score.scoreTickMax){
 			game.score.scoreTick++;
 		}else{
@@ -563,7 +574,7 @@ var Game = function(){
 			ctx.fillStyle = this.color;
 			ctx.font = this.font;
 			ctx.globalAlpha = this.scoreTrans;
-			ctx.fillText("Score: "+this.score +" +"+this.scoreAdd +" x" + this.multiplier,this.x,this.y);
+			ctx.fillText("Score: " + this.score +" +" + this.scoreAdd + " x" + this.multiplier, this.x, this.y);
 			ctx.globalAlpha = 1;
 			this.scoreTrans -= 0.0036666667;
 		}
@@ -600,7 +611,7 @@ var Game = function(){
 				if (this.falling === false){
 					this.jumptimetotal += 0.4;
 					this.diry = -1 * this.gravitynegative;
-					this.y -= (this.jumpspeed - this.jumptimetotal)*this.gravitynegative;
+					this.y -= (this.jumpspeed - this.jumptimetotal) * this.gravitynegative;
 					if (this.jumptimetotal >= this.jumpspeed){
 						this.falling = true;
 					}
@@ -608,7 +619,7 @@ var Game = function(){
 				else{
 					this.diry = 1 * this.gravitynegative;
 					this.jumptimetotal += 0.8;
-					this.y += (this.jumptimetotal - this.jumpspeed)*this.gravitynegative;
+					this.y += (this.jumptimetotal - this.jumpspeed) * this.gravitynegative;
 				}
 			}
 			if(this.falling === true){
