@@ -294,7 +294,7 @@ var Game = function(){
 	};
 	this.spawnWall = function(){
 		if(game.wallTick >= game.wallTickMax){
-			let h = Math.ceil((4));
+			let h = Math.ceil(Math.random()*4);
 			h = h * 50;
 			let rng = Math.random();
 			if(rng > 0.5){
@@ -306,13 +306,13 @@ var Game = function(){
 			game.wallTick = 0;
 		}
 		else{
-			if(game.score.score + game.score.scoreReserve > 100 && game.score.score + game.score.scoreReserve < 500)
+			if(game.score.score + game.score.scoreAdd > 100 && game.score.score + game.score.scoreAdd < 500)
 				game.wallTick = game.wallTick + 2;
-			else if(game.score.score + game.score.scoreReserve >= 500 && game.score.score + game.score.scoreReserve < 700)
+			else if(game.score.score + game.score.scoreAdd >= 500 && game.score.score + game.score.scoreAdd < 700)
 				game.wallTick = game.wallTick + 3;
-			else if(game.score.score + game.score.scoreReserve >= 700 && game.score.score + game.score.scoreReserve < 1000)
+			else if(game.score.score + game.score.scoreAdd >= 700 && game.score.score + game.score.scoreAdd < 1000)
 				game.wallTick = game.wallTick + 4;
-			else if(game.score.score + game.score.scoreReserve >= 1000)
+			else if(game.score.score + game.score.scoreAdd >= 1000)
 				game.wallTick = game.wallTick + 5;
 			else	
 				game.wallTick++;
@@ -576,7 +576,7 @@ var Game = function(){
 			ctx.globalAlpha = this.scoreTrans;
 			ctx.fillText("Score: " + this.score +" +" + this.scoreAdd + " x" + this.multiplier, this.x, this.y);
 			ctx.globalAlpha = 1;
-			this.scoreTrans -= 0.0036666667;
+			this.scoreTrans -= 0.0039888667;
 		}
 	}
 	this.score.moarPoints = function(){
@@ -658,8 +658,8 @@ var Game = function(){
 			}
 			if(this.y <= 20)
 				this.y = 20;
-			if(this.y >= canvas.height - 20)
-				this.y = canvas.height - 20;
+			if(this.y >= canvas.height - this.h - 20)
+				this.y = canvas.height - this.h - 20;
 		}
 	}
 /////////////////////
