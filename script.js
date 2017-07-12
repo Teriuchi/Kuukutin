@@ -356,7 +356,7 @@ var Game = function(){
 ////////////////////////
 	this.Obstacle.prototype.collision = function(){
 		if(!(game.player.movestat === 5)){
-			if (game.player.x + game.player.w - 5 >= this.x && game.player.y + game.player.h >= this.y + 5 
+			if(game.player.x + game.player.w - 5 >= this.x && game.player.y + game.player.h >= this.y + 5 
 			&& game.player.x <= this.x + this.w && game.player.y <= this.y + this.h - 5)
 				switch(game.player.dirx){
 					case -1:	break;
@@ -404,14 +404,14 @@ var Game = function(){
 				}
 			}
 			if(game.player.x + game.player.w - 5 >= this.x && game.player.y + game.player.h >= this.y + (this.h / 3) 
-			&& game.player.x <= this.x + this.w - 10 //Gravity down 
-				&& game.player.y <= this.y + this.h && game.player.gravityReversed === false){
+			&& game.player.x <= this.x + this.w - 10 																//Gravity down 
+			&& game.player.y <= this.y + this.h && game.player.gravityReversed === false){
 				game.player.y = this.y + this.h;
 				game.player.jumptimetotal = 18;
 			}
 			if(game.player.x + game.player.w - 5 >= this.x && game.player.y + game.player.h >= this.y 
 			&& game.player.x <= this.x + this.w - 10 && game.player.y <= this.y + (this.h / 3) 
-			&& game.player.gravityReversed === true){ // Gravity up
+			&& game.player.gravityReversed === true){ 																// Gravity up
 				game.player.y = this.y - game.player.h;
 				game.player.jumptimetotal = 18;
 			}
@@ -620,10 +620,11 @@ var Game = function(){
 					this.diry = 1 * this.gravitynegative;
 					this.jumptimetotal += 0.8;
 					this.y += (this.jumptimetotal - this.jumpspeed) * this.gravitynegative;
+
 				}
 			}
 			if(this.falling === true){
-				if(this.y+this.h >= canvas.height - 20 && this.gravityReversed === false){
+				if(this.y + this.h >= canvas.height - 20 && this.gravityReversed === false){
 					this.onground = true;
 					this.y = canvas.height-this.h - 20;
 					this.jumptimetotal = 0;
@@ -652,9 +653,13 @@ var Game = function(){
 					this.jumptimetotal = 18;
 				}
 			}
-			if(this.x <= 0 || this.y < 0 || this.y > canvas.height){
+			if(this.x <= 0 || this.y < -50 || this.y > canvas.height + 50){
 				this.movestat = 5;
 			}
+			if(this.y <= 20)
+				this.y = 20;
+			if(this.y >= canvas.height - 20)
+				this.y = canvas.height - 20;
 		}
 	}
 /////////////////////
@@ -701,7 +706,7 @@ window.addEventListener("keyup", function (event) {
 	switch (event.which) {
 		case 32: 	game.transitioning = true;
 					break;
-		case 37:	if (game.player.dirx === -1)
+		case 37:	if(game.player.dirx === -1)
 					game.player.dirx = 0;
 					break;			
 		case 38:	game.player.falling = true;
