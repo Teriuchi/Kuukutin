@@ -543,7 +543,7 @@ var Game = function(){
 		scoreAdd: 0,
 		scoreTrans: 1,
 		addTick: 0,
-		addTickMax: 250,
+		addTickMax: 200,
 		addingTime: false,
 		multiplier: 0.9,
 		scoreReserve: 0
@@ -576,7 +576,7 @@ var Game = function(){
 			ctx.globalAlpha = this.scoreTrans;
 			ctx.fillText("Score: " + this.score +" +" + this.scoreAdd + " x" + this.multiplier, this.x, this.y);
 			ctx.globalAlpha = 1;
-			this.scoreTrans -= 0.0039888667;
+			this.scoreTrans -= 0.0046666667;
 		}
 	}
 	this.score.moarPoints = function(){
