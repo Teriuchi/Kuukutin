@@ -338,10 +338,10 @@ var Game = function(){
 	}
 	this.floors = function(){
 		let canvasBlocks = Math.ceil(canvas.width / 100) + 1;
-		for (let x=0;x<canvasBlocks;x++){
+		for (let x = 0; x < canvasBlocks; x++){
 				ctx.drawImage(this.imgobs, 4, 0, 100, 50, (x * 100) - game.floorTick, canvas.height - 20, 100, 50);
 		}
-		for (let x=0;x<canvasBlocks;x++){
+		for (let x = 0; x < canvasBlocks; x++){
 				ctx.drawImage(this.imgobs, 4, 0, 100, 50, (x * 100) - game.floorTick, -30, 100, 50);
 		}
 		if(game.floorTick >= game.floorTickMax){
@@ -656,8 +656,11 @@ var Game = function(){
 			if(this.x <= 0 || this.y < -50 || this.y > canvas.height + 50){
 				this.movestat = 5;
 			}
-			if(this.y <= 20)
+			if(this.y <= 20){
 				this.y = 20;
+					if(game.player.gravityReversed === false)
+						game.player.jumptimetotal = 18;
+			}
 			if(this.y >= canvas.height - this.h - 20)
 				this.y = canvas.height - this.h - 20;
 		}
